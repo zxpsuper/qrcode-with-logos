@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>QRcode-with-logo</title>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <img src="" alt="" id="image" />
+    <script src="./QRcode-with-logo.js"></script>
+    <script>
+      let qrcode = new QrCodeWithLogo({
+        canvas: document.getElementById("canvas"),
+        content: "https://github.com/zxpsuper",
+        width: 380,
+        //   download: true,
+        image: document.getElementById("image"),
+        logo: {
+          src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
+        }
+      });
+
+      qrcode.toCanvas().then(() => {
+        qrcode.toImage().then(() => {
+          setTimeout(() => {
+            qrcode.downloadImage("hello world");
+          }, 2000);
+        });
+      });
+    </script>
+  </body>
+</html>
