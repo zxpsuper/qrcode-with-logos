@@ -206,6 +206,7 @@ qrcode.toImage().then(() => {
 
 ```html
 <canvas id="canvas"></canvas> <img src="" alt="" id="image" />
+<img id="image" alt="">
 ```
 
 ```js
