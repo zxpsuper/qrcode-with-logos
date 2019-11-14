@@ -10,7 +10,7 @@ import { isFunction, isString } from "./utils";
 
 export const toImage = (options: BaseOptions) => {
   const canvas = document.createElement("canvas");
-  console.log("options", options);
+
   options.canvas = canvas;
   if (options.logo) {
     if (isString(options.logo)) {
