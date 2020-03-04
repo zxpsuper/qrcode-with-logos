@@ -1,8 +1,8 @@
 /*
  * @Author: super
  * @Date: 2019-06-26 18:01:57
- * @Last Modified by: super
- * @Last Modified time: 2019-07-01 15:02:49
+ * @Last Modified by: suporka
+ * @Last Modified time: 2020-03-04 12:23:09
  */
 import { BaseOptions } from "../types/index";
 
@@ -57,6 +57,7 @@ export const drawLogo = ({ canvas, content, logo }: BaseOptions) => {
   // Use canvas to draw more features, such as borderRadius
   const drawLogoWithCanvas = (image: any) => {
     const canvasImage = document.createElement("canvas");
+    
     canvasImage.width = logoXY + logoWidth;
     canvasImage.height = logoXY + logoWidth;
     canvasImage

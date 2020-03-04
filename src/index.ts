@@ -1,8 +1,8 @@
 /*
  * @Author: super
  * @Date: 2019-06-27 16:29:31
- * @Last Modified by: super
- * @Last Modified time: 2019-06-27 17:45:03
+ * @Last Modified by: suporka
+ * @Last Modified time: 2020-03-04 12:24:50
  */
 
 import { toCanvas } from "./toCanvas";
