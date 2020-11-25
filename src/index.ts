@@ -7,21 +7,22 @@
 
 import { toCanvas } from "./toCanvas";
 import { toImage, saveImage } from "./toImage";
-import { IQrCodeWithLogo, BaseOptions } from "../types/index";
+import { BaseOptions } from "../types/index";
 
-class QrCodeWithLogo implements IQrCodeWithLogo {
+class QrCodeWithLogo {
   option: BaseOptions;
+
   constructor(option: BaseOptions) {
     this.option = option;
     return this;
   }
-  toCanvas = () => {
+  public toCanvas(): Promise<void>{
     return toCanvas.call(this, this.option);
   };
-  toImage = () => {
+  public toImage = () => {
     return toImage.call(this, this.option);
   };
-  downloadImage = (name: string) => {
+  public downloadImage = (name: string) => {
     saveImage(this.option.image, name);
   };
 }

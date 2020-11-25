@@ -24,7 +24,7 @@ export const toImage = (options: BaseOptions) => {
   return toCanvas(options).then(() => {
     const { image = new Image(), downloadName = "qr-code" } = options;
     let { download } = options;
-    // @ts-ignore
+
     image.src = canvas.toDataURL();
 
     if (download !== true && !isFunction(download)) {
@@ -37,9 +37,7 @@ export const toImage = (options: BaseOptions) => {
     };
 
     download && download(startDownload);
-    return new Promise((resolve, reject) => {
-      resolve();
-    });
+    return Promise.resolve();
   });
 };
 

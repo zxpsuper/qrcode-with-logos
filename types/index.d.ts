@@ -23,19 +23,18 @@ export interface BaseOptions {
   content: string;
   width?: number;
   nodeQrCodeOptions?: NodeQrCodeOptions;
-  logo?: Logo;
+  logo?: Logo | { src: string };
   canvas?: Element;
-  image?: Element;
+  image?: HTMLImageElement;
   download?: boolean | Function;
   downloadName?: string;
 }
 
-export interface IQrCodeWithLogo {
+declare class IQrCodeWithLogo {
+  constructor(option: BaseOptions)
   toCanvas(): Promise<any>;
   toImage(): Promise<any>;
   downloadImage(name: string): void;
 }
 
-declare const QrCodeWithLogo: IQrCodeWithLogo;
-
-export default QrCodeWithLogo;
+export default IQrCodeWithLogo
