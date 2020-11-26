@@ -23,8 +23,8 @@ export interface BaseOptions {
   content: string;
   width?: number;
   nodeQrCodeOptions?: NodeQrCodeOptions;
-  logo?: Logo | { src: string };
-  canvas?: Element;
+  logo?: Logo | string;
+  canvas?: HTMLCanvasElement;
   image?: HTMLImageElement;
   download?: boolean | Function;
   downloadName?: string;
@@ -35,6 +35,7 @@ declare class IQrCodeWithLogo {
   toCanvas(): Promise<any>;
   toImage(): Promise<any>;
   downloadImage(name: string): void;
+  getCanvas(): Promise<HTMLCanvasElement>
 }
 
 export default IQrCodeWithLogo
