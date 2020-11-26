@@ -238,9 +238,7 @@ let qrcode = new QrCodeWithLogo({
 
 qrcode.toCanvas().then(() => {
   qrcode.toImage().then(() => {
-    setTimeout(() => {
-      qrcode.downloadImage("hello world");
-    }, 2000);
+    qrcode.downloadImage("hello world");
   });
 });
 ```
