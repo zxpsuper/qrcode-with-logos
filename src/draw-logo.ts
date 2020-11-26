@@ -5,13 +5,21 @@
  * @Last Modified time: 2020-03-04 12:23:09
  */
 import { BaseOptions } from "../types/index";
+import { isString } from "./utils";
+import { Logo } from '../types/index'
 
-export const drawLogo = ({ canvas, content, logo }: BaseOptions) => {
-  if (!logo) {
-    return;
-  }
-  // @ts-ignore
+export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
+
+  if (!logo) return Promise.resolve();
+
+  if (logo === '') return Promise.resolve();
+
   const canvasWidth = canvas.width;
+
+  if (isString(logo)) {
+    logo = { src: logo } as Logo;
+  }
+  
   const {
     logoSize = 0.15,
     borderColor = "#ffffff",
@@ -20,13 +28,14 @@ export const drawLogo = ({ canvas, content, logo }: BaseOptions) => {
     crossOrigin,
     borderRadius = 8,
     logoRadius = 0
-  } = logo;
+  } = logo as Logo;
+
   let logoSrc = typeof logo === "string" ? logo : logo.src;
   let logoWidth = canvasWidth * logoSize;
   let logoXY = (canvasWidth * (1 - logoSize)) / 2;
   let logoBgWidth = canvasWidth * (logoSize + borderSize);
   let logoBgXY = (canvasWidth * (1 - logoSize - borderSize)) / 2;
-  // @ts-ignore
+
   const ctx = canvas.getContext("2d");
 
   // logo 底色, draw logo background color
@@ -42,20 +51,18 @@ export const drawLogo = ({ canvas, content, logo }: BaseOptions) => {
 
   // logo
   const image = new Image();
-  if (crossOrigin || logoRadius) {
-    image.setAttribute("crossOrigin", crossOrigin || "anonymous");
-  }
+  image.setAttribute("crossOrigin", crossOrigin || "anonymous");
   image.src = logoSrc;
 
   // 使用image绘制可以避免某些跨域情况
   // Use image drawing to avoid some cross-domain situations
-  const drawLogoWithImage = (image: any) => {
+  const drawLogoWithImage = (image: HTMLImageElement) => {
     ctx.drawImage(image, logoXY, logoXY, logoWidth, logoWidth);
   };
 
   // 使用canvas绘制以获得更多的功能
   // Use canvas to draw more features, such as borderRadius
-  const drawLogoWithCanvas = (image: any) => {
+  const drawLogoWithCanvas = (image: HTMLImageElement) => {
     const canvasImage = document.createElement("canvas");
     
     canvasImage.width = logoXY + logoWidth;
@@ -71,7 +78,7 @@ export const drawLogo = ({ canvas, content, logo }: BaseOptions) => {
 
   // 将 logo绘制到 canvas上
   // Draw the logo on the canvas
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     image.onload = () => {
       logoRadius ? drawLogoWithCanvas(image) : drawLogoWithImage(image);
       resolve();
@@ -80,7 +87,7 @@ export const drawLogo = ({ canvas, content, logo }: BaseOptions) => {
 };
 
 // draw radius
-const canvasRoundRect = (ctx: any) => (
+const canvasRoundRect = (ctx: CanvasRenderingContext2D) => (
   x: number,
   y: number,
   w: number,

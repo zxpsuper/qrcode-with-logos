@@ -7,7 +7,8 @@
 import { BaseOptions, NodeQrCodeOptions } from "../types/index";
 import { promisify } from "./utils";
 // @ts-ignore
-import QRCode = require("qrcode");
+// const QRCode = require("qrcode")
+const QRCode = require("qrcode")
 
 const toCanvas = promisify(QRCode.toCanvas);
 

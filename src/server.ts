@@ -8,20 +8,22 @@ import QrCodeWithLogo from "./index";
 // @ts-ignore
 import Logo = require("./super.jpg");
 let demo = new QrCodeWithLogo({
-  canvas: document.getElementById("canvas"),
+  canvas: document.getElementById("canvas") as HTMLCanvasElement,
   content: "https://github.com/zxpsuper",
   width: 380,
   // download: true,
-  image: document.getElementById("image"),
+  image: document.getElementById("image") as HTMLImageElement,
   logo: {
     src: Logo
   }
-}).toImage();
+})
+// demo.toCanvas()
+demo.toImage()
+demo.getCanvas().then(canvas => {
+  console.log(canvas)
+  canvas.toBlob(function(blob) {
+    console.log(blob)
+  })
+})
 
-// demo.toCanvas().then(() => {
-//   demo.toImage().then(() => {
-//     setTimeout(() => {
-//       demo.downloadImage("hello world");
-//     }, 2000);
-//   });
-// });
+

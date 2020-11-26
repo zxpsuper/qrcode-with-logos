@@ -8,23 +8,43 @@
 import { toCanvas } from "./toCanvas";
 import { toImage, saveImage } from "./toImage";
 import { BaseOptions } from "../types/index";
-
+const pkg = require('../package.json')
 class QrCodeWithLogo {
+
+  static version: string = pkg.version
+  
   option: BaseOptions;
+  ifCanvasDrawed: boolean = false
+  ifImageCreated: boolean = false
+
+  private defaultOption: BaseOptions = {
+    canvas: document.createElement("canvas"),
+    image: new Image(),
+    content: ''
+  }
 
   constructor(option: BaseOptions) {
-    this.option = option;
-    return this;
+    this.option = Object.assign(this.defaultOption, option);
   }
-  public toCanvas(): Promise<void>{
-    return toCanvas.call(this, this.option);
+
+  public toCanvas(): Promise<void> {
+    return toCanvas.call(this, this.option).then(() => {
+      this.ifCanvasDrawed = true
+      return Promise.resolve()
+    })
   };
-  public toImage = () => {
+  public toImage(): Promise<void> {
     return toImage.call(this, this.option);
-  };
-  public downloadImage = (name: string) => {
+  }
+  public async downloadImage(name: string) {
+    if (!this.ifImageCreated) await this.toImage()
     saveImage(this.option.image, name);
-  };
+  }
+  public async getCanvas(): Promise<HTMLCanvasElement> {
+    if (!this.ifCanvasDrawed) await this.toCanvas()
+    return this.option.canvas
+  }
+
 }
 
 export default QrCodeWithLogo;
