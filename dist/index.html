@@ -5,52 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>QRcode-with-logo</title>
+    <style>
+      .code {
+        display: inline-block;
+        color: #ccc;
+        background-color: #666;
+        padding: 2px 10px;
+        border-radius: 2px;
+      }
+    </style>
   </head>
   <body>
+    <h2>qrcode-with-logos</h2>
+    <p>You can input <span class="code">qrcode.toCanvas()</span> to draw a canvas on console.
+      <button onclick="qrcode.toCanvas()">click me!</button>
+    </p>
+    <p>You can input <span class="code">qrcode.toImage()</span> to create a image element on console.
+      <button onclick="qrcode.toImage()">click me!</button></p>
+    <p>You can input <span class="code">qrcode.downloadImage('qrcode')</span> to download image on console.
+      <button onclick="qrcode.downloadImage('qrcode')">download!</button>
+    </p>
+    <p>You can input <span class="code">qrcode.getCanvas().then(canvas => {})</span> to deal with the canvas.</p>
     <canvas id="canvas"></canvas>
     <img src="" alt="" id="image" />
-    <!-- <script src="./QRcode-with-logo.js"></script> -->
-    <!-- <script src="https://zxpsuper.github.io/qrcode-with-logos/dist/QRcode-with-logo.js"></script>
+    <script src="./qrcode-with-logos.umd.min.js"></script>
     <script>
-      let qrcode = new QrCodeWithLogo({
+      window.qrcode = new QrCodeWithLogo({
         canvas: document.getElementById("canvas"),
         content: "https://github.com/zxpsuper",
         width: 380,
         //   download: true,
         image: document.getElementById("image"),
         logo: {
-          src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
+          src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4",
+          logoSize: 0.2
         }
-      });
-
-      qrcode.toCanvas().then(() => {
-        qrcode.toImage().then(() => {
-          setTimeout(() => {
-            qrcode.downloadImage("hello world");
-          }, 2000);
-        });
-      });
-    </script> -->
-    <script src="https://zxpsuper.github.io/qrcode-with-logos/dist/QRcode-with-logo.js"></script>
-    <script>
-      let qrcode = new QrCodeWithLogo({
-        canvas: document.getElementById("canvas"),
-        content: "https://github.com/zxpsuper",
-        width: 380,
-        //   download: true,
-        image: document.getElementById("image"),
-        logo: {
-          src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
-        }
-      });
-
-      qrcode.toCanvas().then(() => {
-        qrcode.toImage().then(() => {
-          setTimeout(() => {
-            qrcode.downloadImage("hello world");
-          }, 2000);
-        });
       });
     </script>
+
   </body>
 </html>

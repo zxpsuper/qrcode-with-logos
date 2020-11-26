@@ -201,7 +201,25 @@ qrcode.toImage().then(() => {
   }, 2000);
 });
 ```
+`getCanvas()` ———— Return `Promise<HTMLCanvasElement>`, you can use the HTMLCanvasElement to do more things with canvas.
 
+```js
+let qrcode = new QrCodeWithLogo({
+  canvas: document.getElementById("canvas"),
+  content: "https://github.com/zxpsuper",
+  width: 380,
+  //   download: true,
+  image: document.getElementById("image"),
+  logo: {
+    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
+  }
+});
+
+qrcode.getCanvas().then(canvas => {
+  canvas.toDataURL()
+  // or do ohter things with canvas
+});
+```
 ## Example
 
 ```html

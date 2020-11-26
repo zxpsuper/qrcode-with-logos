@@ -7,45 +7,47 @@
 import { BaseOptions } from "../types/index";
 import { toCanvas } from "./toCanvas";
 import { isFunction, isString } from "./utils";
+import { Logo } from '../types/index'
 
-export const toImage = (options: BaseOptions) => {
-  const canvas = document.createElement("canvas");
-
-  options.canvas = canvas;
+export const toImage = async function (options: BaseOptions) {
+  const { canvas } = options
   if (options.logo) {
     if (isString(options.logo)) {
-      // @ts-ignore
-      options.logo = { src: options.logo };
+      options.logo = { src: options.logo } as Logo;
     }
-    // @ts-ignore
-    options.logo.crossOrigin = "Anonymous";
+    (options.logo as Logo).crossOrigin = "Anonymous";
   }
-  // @ts-ignore
-  return toCanvas(options).then(() => {
-    const { image = new Image(), downloadName = "qr-code" } = options;
-    let { download } = options;
 
-    image.src = canvas.toDataURL();
+  if (!this.ifCanvasDrawed) await toCanvas(options)
 
-    if (download !== true && !isFunction(download)) {
-      return;
-    }
-    download = download === true ? (start: Function) => start() : download;
+  const { image = new Image(), downloadName = "qr-code" } = options;
+  let { download } = options;
 
-    const startDownload: Function = () => {
-      saveImage(image, downloadName);
-    };
+  if (canvas.toDataURL()) image.src = canvas.toDataURL();
+  else {
+    throw new Error('Can not get the canvas DataURL')
+  }
 
-    download && download(startDownload);
-    return Promise.resolve();
-  });
+  this.ifImageCreated = true
+
+  if (download !== true && !isFunction(download)) {
+    return;
+  }
+  
+  download = download === true ? (start: Function) => start() : download;
+
+  const startDownload: Function = () => {
+    saveImage(image, downloadName);
+  };
+
+  download && download(startDownload);
+
+  return Promise.resolve();
 };
 
 
-export const saveImage = (image: Element, name: string) => {
-  // @ts-ignore
+export const saveImage = (image: HTMLImageElement, name: string): void => {
   const dataURL = image.src;
-
   const link = document.createElement("a");
   link.download = name;
   link.href = dataURL;
