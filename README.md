@@ -195,11 +195,7 @@ let qrcode = new QrCodeWithLogo({
   }
 });
 
-qrcode.toImage().then(() => {
-  setTimeout(() => {
-    qrcode.downloadImage("hello world");
-  }, 2000);
-});
+qrcode.downloadImage("hello world");
 ```
 `getCanvas()` ———— Return `Promise<HTMLCanvasElement>`, you can use the HTMLCanvasElement to do more things with canvas.
 
