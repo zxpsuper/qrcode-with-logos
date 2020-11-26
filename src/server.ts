@@ -4,8 +4,9 @@
  * @Last Modified by: super
  * @Last Modified time: 2019-07-01 15:51:26
  */
-import QrCodeWithLogo from "./index.ts";
-import Logo from "./super.jpg";
+import QrCodeWithLogo from "./index";
+// @ts-ignore
+import Logo = require("./super.jpg");
 let demo = new QrCodeWithLogo({
   canvas: document.getElementById("canvas"),
   content: "https://github.com/zxpsuper",

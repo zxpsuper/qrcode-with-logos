@@ -44,7 +44,7 @@ const getOriginWidth = (
 
 // 对于内容少的QrCode，增大容错率
 // Increase the fault tolerance for QrCode with less content
-const getErrorCorrectionLevel = (content: string) => {
+const getErrorCorrectionLevel = (content: string): string => {
   if (content.length > 36) {
     return "M";
   } else if (content.length > 16) {
