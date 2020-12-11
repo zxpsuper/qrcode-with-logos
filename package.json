@@ -1,15 +1,18 @@
 {
   "name": "qrcode-with-logos",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
-  "main": "dist/qrcode-with-logos.umd.min.js",
+  "main": "lib/qrcode-with-logos.common.js",
   "typings": "types/index.d.ts",
-  "module": "dist/qrcode-with-logos.es5.js",
+  "module": "lib/qrcode-with-logos.esm.js",
+  "umd": "lib/qrcode-with-logos.js",
+  "jsdelivr": "doc/qrcode-with-logos.min.js",
+  "unpkg": "doc/qrcode-with-logos.min.js",
   "className": "QrCodeWithLogo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --hot --open --config ./webpack.dev.js",
-    "build": "webpack --config ./webpack.config.js",
+    "start": "parcel ./index.html",
+    "build:lib": "rollup --config rollup.config.min.js && npm run build:rollup",
     "build:rollup": "rollup -c"
   },
   "keywords": [
@@ -30,9 +33,7 @@
   },
   "homepage": "https://github.com/zxpsuper/QRcode-with-logo#readme",
   "devDependencies": {
-    "clean-webpack-plugin": "^3.0.0",
-    "file-loader": "^4.0.0",
-    "html-webpack-plugin": "^3.2.0",
+    "parcel-bundler": "^1.12.4",
     "rollup": "^2.33.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
@@ -40,13 +41,8 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript": "^1.0.1",
-    "ts-loader": "^6.0.4",
-    "typescript": "^3.5.2",
-    "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.35.0",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2",
-    "webpack-merge": "^4.2.1"
+    "tslib": "^2.0.3",
+    "typescript": "^3.5.2"
   },
   "dependencies": {
     "qrcode": "^1.4.4"
