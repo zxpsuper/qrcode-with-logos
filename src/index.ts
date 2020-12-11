@@ -8,11 +8,11 @@
 import { toCanvas } from "./toCanvas";
 import { toImage, saveImage } from "./toImage";
 import { BaseOptions } from "../types/index";
-const pkg = require('../package.json')
+import { version } from '../package.json'
 class QrCodeWithLogo {
 
-  static version: string = pkg.version
-  
+  static version: string = version
+
   option: BaseOptions;
   ifCanvasDrawed: boolean = false
   ifImageCreated: boolean = false
