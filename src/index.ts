@@ -25,6 +25,8 @@ class QrCodeWithLogo {
 
   constructor(option: BaseOptions) {
     this.option = Object.assign(this.defaultOption, option);
+    if (!this.option.canvas) this.option.canvas = document.createElement("canvas")
+    if (!this.option.image) this.option.image = document.createElement("img")
   }
 
   public toCanvas(): Promise<void> {

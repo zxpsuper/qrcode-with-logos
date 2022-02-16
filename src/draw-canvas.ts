@@ -27,7 +27,6 @@ export const renderQrCode = ({
     // 得到原始比例后还原至设定值，再放大4倍以获取高清图
     // Restore to the set value according to the original ratio, and then zoom in 4 times to get the HD image.
     nodeQrCodeOptions.scale = width === 0 ? undefined : (width / _width) * 4;
-    if (!canvas) canvas = document.createElement("canvas")
     // @ts-ignore
     return toCanvas(canvas, content, nodeQrCodeOptions);
   });
