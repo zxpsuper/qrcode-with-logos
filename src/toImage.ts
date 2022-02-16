@@ -20,7 +20,8 @@ export const toImage = async function (options: BaseOptions) {
 
   if (!this.ifCanvasDrawed) await toCanvas(options)
 
-  const { image = new Image(), downloadName = "qr-code" } = options;
+  let { image, downloadName = "qr-code" } = options;
+  if (!image) image = new Image()
   let { download } = options;
 
   if (canvas.toDataURL()) image.src = canvas.toDataURL();
