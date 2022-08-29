@@ -8,7 +8,7 @@
 import { toCanvas } from "./toCanvas";
 import { toImage, saveImage } from "./toImage";
 import { BaseOptions } from "../types/index";
-const { version } = require('../package.json')
+import { version } from '../package.json';
 class QrCodeWithLogo {
 
   static version: string = version

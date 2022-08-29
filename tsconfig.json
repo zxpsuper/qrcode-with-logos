@@ -4,6 +4,7 @@
       "module": "commonjs",
       "noImplicitAny": true,
       "removeComments": true,
+      "resolveJsonModule": true,
       "preserveConstEnums": true,
       "sourceMap": true,
       "allowJs": true
