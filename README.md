@@ -213,7 +213,7 @@ let qrcode = new QrCodeWithLogo({
 
 qrcode.getCanvas().then(canvas => {
   canvas.toDataURL()
-  // or do ohter things with canvas
+  // or do other things with canvas
 });
 ```
 ## Example
