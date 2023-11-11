@@ -5,7 +5,7 @@
  * @Last Modified time: 2019-06-27 16:47:22
  */
 import { renderQrCode } from "./draw-canvas";
-import { BaseOptions } from "../types/index";
+import { BaseOptions } from "./model";
 import { drawLogo } from "./draw-logo";
 
 

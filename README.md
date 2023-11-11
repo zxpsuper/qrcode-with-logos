@@ -56,7 +56,7 @@ Type: `Boolean`
 
 Default: `false`
 
-You can set the value to be true to download the file immediately, the premise is that you have use the `toImage()` methods.
+You can set the value to be true to download the file immediately.
 
 Examplate
 
@@ -70,7 +70,7 @@ new QrCodeWithLogo({
   logo: {
     src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
   }
-}).toImage();
+})
 ```
 
 ### `downloadName`
@@ -147,41 +147,7 @@ Type `String` -- Default: `"Anonymous"`
 
 ## Methods
 
-`toCanvas()` ———— Return `Promise`, show the qrcode by canvas tag
-
-```js
-new QrCodeWithLogo({
-  canvas: document.getElementById("canvas"),
-  content: "https://github.com/zxpsuper",
-  width: 380,
-  //   download: true,
-  image: document.getElementById("image"),
-  logo: {
-    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
-  }
-})
-  .toCanvas()
-  .then(() => {});
-```
-
-`toImage()` ———— Return `Promise`, show the qrcode by img tag
-
-```js
-new QrCodeWithLogo({
-  canvas: document.getElementById("canvas"),
-  content: "https://github.com/zxpsuper",
-  width: 380,
-  //   download: true,
-  image: document.getElementById("image"),
-  logo: {
-    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
-  }
-})
-  .toImage()
-  .then(() => {});
-```
-
-`downloadImage(name: string)` ———— Return `Promise`, set the filename and download the image, should be use after `toImage()` method.
+`downloadImage(name: string)` ———— Return `Promise`, set the filename and download the image.
 
 ```js
 let qrcode = new QrCodeWithLogo({
@@ -195,7 +161,9 @@ let qrcode = new QrCodeWithLogo({
   }
 });
 
-qrcode.downloadImage("hello world");
+qrcode.downloadImage("hello-world.png").then(() => {
+  // do what you want to do
+})
 ```
 `getCanvas()` ———— Return `Promise<HTMLCanvasElement>`, you can use the HTMLCanvasElement to do more things with canvas.
 
@@ -213,8 +181,29 @@ let qrcode = new QrCodeWithLogo({
 
 qrcode.getCanvas().then(canvas => {
   canvas.toDataURL()
-  // or do ohter things with canvas
+  // or do other things with canvas
 });
+
+```
+
+`getImage()` ———— Return `Promise<HTMLImageElement>`, you can use the HTMLImageElement to do more things with image.
+
+```js
+let qrcode = new QrCodeWithLogo({
+  canvas: document.getElementById("canvas"),
+  content: "https://github.com/zxpsuper",
+  width: 380,
+  //   download: true,
+  image: document.getElementById("image"),
+  logo: {
+    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
+  }
+});
+
+qrcode.getImage().then(image => {
+  // or do other things with image
+});
+
 ```
 ## Example
 

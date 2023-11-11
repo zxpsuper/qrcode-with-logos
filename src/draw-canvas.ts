@@ -4,11 +4,11 @@
  * @Last Modified by: super
  * @Last Modified time: 2019-06-27 17:40:58
  */
-import { BaseOptions, NodeQrCodeOptions } from "../types/index";
+import { BaseOptions, NodeQrCodeOptions } from "./model";
 import { promisify } from "./utils";
 // @ts-ignore
 // import QRCode from "qrcode"
-import QRCode from "qrcode"
+const QRCode = require("qrcode")
 
 const toCanvas = promisify(QRCode.toCanvas);
 

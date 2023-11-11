@@ -17,18 +17,14 @@
   </head>
   <body>
     <h2>qrcode-with-logos</h2>
-    <p>You can input <span class="code">qrcode.toCanvas()</span> to draw a canvas on console.
-      <button onclick="qrcode.toCanvas()">click me!</button>
-    </p>
-    <p>You can input <span class="code">qrcode.toImage()</span> to create a image element on console.
-      <button onclick="qrcode.toImage()">click me!</button></p>
     <p>You can input <span class="code">qrcode.downloadImage('qrcode')</span> to download image on console.
       <button onclick="qrcode.downloadImage('qrcode')">download!</button>
     </p>
     <p>You can input <span class="code">qrcode.getCanvas().then(canvas => {})</span> to deal with the canvas.</p>
+    <p>You can input <span class="code">qrcode.getImage().then(image => {})</span> to deal with the image.</p>
     <canvas id="canvas"></canvas>
     <img src="" alt="" id="image" />
-    <script src="./qrcode-with-logo.min.js"></script>
+    <script src="../lib/qrcode-with-logos.min.js"></script>
     <script>
       window.qrcode = new QrCodeWithLogo({
         canvas: document.getElementById("canvas"),

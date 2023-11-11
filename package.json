@@ -1,20 +1,21 @@
 {
   "name": "qrcode-with-logos",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "lib/qrcode-with-logos.common.js",
-  "typings": "types/index.d.ts",
+  "types": "types/index.d.ts",
   "module": "lib/qrcode-with-logos.esm.js",
-  "umd": "lib/qrcode-with-logos.js",
-  "jsdelivr": "doc/qrcode-with-logos.min.js",
-  "unpkg": "doc/qrcode-with-logos.min.js",
+  "umd": "lib/qrcode-with-logos.min.js",
+  "jsdelivr": "lib/qrcode-with-logos.min.js",
+  "unpkg": "lib/qrcode-with-logos.min.js",
   "className": "QrCodeWithLogo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel ./index.html",
-    "build:lib": "rollup --config rollup.config.min.js && npm run build:rollup",
+    "build:type": "tsc --module commonjs",
+    "build": "npm run build:min && npm run build:rollup",
     "build:rollup": "rollup -c",
-    "build": "webpack --config ./webpack.config.js"
+    "build:min": "webpack --config ./webpack.config.js"
   },
   "keywords": [
     "qr-code",
@@ -33,6 +34,9 @@
     "url": "https://github.com/zxpsuper/QRcode-with-logo/issues"
   },
   "homepage": "https://github.com/zxpsuper/QRcode-with-logo#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
     "rollup": "^2.33.3",

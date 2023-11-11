@@ -18,8 +18,8 @@ module.exports = {
   },
   entry: "./src/index.ts",
   output: {
-    filename: "qrcode-with-logo.min.js", //contenthash 若文件内容无变化，则contenthash 名称不变
-    path: path.resolve(__dirname, "./doc"),
+    filename: "qrcode-with-logos.min.js", //contenthash 若文件内容无变化，则contenthash 名称不变
+    path: path.resolve(__dirname, "./lib"),
     library: "QrCodeWithLogo",
     libraryExport: "default",
     libraryTarget: "umd"

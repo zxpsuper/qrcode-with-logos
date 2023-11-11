@@ -4,9 +4,8 @@
  * @Last Modified by: suporka
  * @Last Modified time: 2020-03-04 12:23:09
  */
-import { BaseOptions } from "../types/index";
+import { BaseOptions, Logo } from "./model";
 import { isString } from "./utils";
-import { Logo } from '../types/index'
 
 export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
 
@@ -14,7 +13,7 @@ export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
 
   if (logo === '') return Promise.resolve();
 
-  const canvasWidth = canvas.width;
+  const canvasWidth = canvas!.width;
 
   if (isString(logo)) {
     logo = { src: logo } as Logo;
@@ -36,7 +35,7 @@ export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
   let logoBgWidth = canvasWidth * (logoSize + borderSize);
   let logoBgXY = (canvasWidth * (1 - logoSize - borderSize)) / 2;
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas!.getContext("2d") as CanvasRenderingContext2D ;
 
   // logo 底色, draw logo background color
   canvasRoundRect(ctx)(
@@ -68,20 +67,24 @@ export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
     canvasImage.width = logoXY + logoWidth;
     canvasImage.height = logoXY + logoWidth;
     canvasImage
-      .getContext("2d")
+      .getContext("2d")!
       .drawImage(image, logoXY, logoXY, logoWidth, logoWidth);
 
     canvasRoundRect(ctx)(logoXY, logoXY, logoWidth, logoWidth, logoRadius);
+    // @ts-ignore
     ctx.fillStyle = ctx.createPattern(canvasImage, "no-repeat");
     ctx.fill();
   };
 
   // 将 logo绘制到 canvas上
   // Draw the logo on the canvas
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     image.onload = () => {
       logoRadius ? drawLogoWithCanvas(image) : drawLogoWithImage(image);
       resolve();
+    };
+    image.onerror = () => {
+      reject('logo load fail!')
     };
   });
 };

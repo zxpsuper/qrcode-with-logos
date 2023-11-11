@@ -4,26 +4,26 @@
  * @Last Modified by: super
  * @Last Modified time: 2019-07-01 15:51:26
  */
-import QrCodeWithLogo from "./index";
+// import QrCodeWithLogo from "./index";
+import QrCodeWithLogo from "../lib/qrcode-with-logos.esm";
 //@ts-ignore
-import Logo = require("./super.jpg");
-let demo = new QrCodeWithLogo({
+const Logo = require("./super.jpg");
+
+window.demo = new QrCodeWithLogo({
   canvas: document.getElementById("canvas") as HTMLCanvasElement,
   content: "https://github.com/zxpsuper",
   width: 380,
-  // download: true,
+  download: true,
   image: document.getElementById("image") as HTMLImageElement,
   logo: {
     src: Logo
+  },
+  nodeQrCodeOptions: {
+    color: {
+      light: '#00000000'
+    }
   }
 })
-// demo.toCanvas()
-demo.toImage()
-demo.getCanvas().then(canvas => {
-  console.log(canvas)
-  canvas.toBlob(function(blob) {
-    console.log(blob)
-  })
-})
 
+// demo.downloadImage('haha.png')
 

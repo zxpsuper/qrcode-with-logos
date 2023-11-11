@@ -1,13 +1,22 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-      "module": "commonjs",
-      "noImplicitAny": true,
-      "removeComments": true,
-      "resolveJsonModule": true,
-      "preserveConstEnums": true,
-      "sourceMap": true,
-      "allowJs": true
-    },
-    "files": ["./src/index.ts"]
-  }
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es5",
+    "module": "es2015",
+    "lib": ["es2015", "es2016", "es2017", "dom", "dom.iterable", "scripthost"],
+    "strict": true,
+    "sourceMap": false,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declarationDir": "types",
+    "outDir": "lib",
+    "downlevelIteration": true,
+    "typeRoots": ["node_modules/@types"],
+    "skipLibCheck": true,
+    // "emitDeclarationOnly": true, // rollup 构建时需注释
+    "resolveJsonModule": true
+  },
+  "include": ["index.ts"]
+}

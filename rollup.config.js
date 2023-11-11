@@ -6,7 +6,8 @@ import common from 'rollup-plugin-commonjs'
 import rollupTypescript  from 'rollup-plugin-typescript'
 import polyfills from 'rollup-plugin-node-polyfills'
 import { terser } from 'rollup-plugin-terser'
-const pkg = require('./package.json')
+import pkg from './package.json';
+// const pkg = require('./package.json')
 
 export default {
     input: 'src/index.ts',
@@ -14,11 +15,6 @@ export default {
         {
             file: pkg.module,
             format: 'esm',
-        },
-        {
-            file: pkg.umd,
-            format: 'umd',
-            name: pkg.className,
         },
         {
             file: pkg.main,

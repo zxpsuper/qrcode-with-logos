@@ -1,0 +1,11 @@
+dist/
+src/
+.gitignore
+.npmignore
+.npmrc
+index.html
+demo.png
+index.ts
+rollup.config.js
+tsconfig.json
+webpack.config.js
