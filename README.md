@@ -1,4 +1,6 @@
-# qrcode-with-logos
+# qrcode-with-logos 
+
+![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos)  ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat-square)
 
 ![QRcode-with-logos](https://github.com/zxpsuper/qrcode-with-logos/raw/master/demo.png)
 
@@ -225,11 +227,7 @@ let qrcode = new QrCodeWithLogo({
   }
 });
 
-qrcode.toCanvas().then(() => {
-  qrcode.toImage().then(() => {
-    qrcode.downloadImage("hello world");
-  });
-});
+qrcode.downloadImage("qrcode.png");
 ```
 
 ## Ecosystem
@@ -244,4 +242,4 @@ qrcode.toCanvas().then(() => {
 
 ## Questions or advise
 
-If you have some question or advise, you can send me a E-mail(zxpscau@163.com).
+If you have some question or advise, you can send me a E-mail(zxpscau@163.com) or open an [issue](https://github.com/zxpsuper/qrcode-with-logos/issues/new).
