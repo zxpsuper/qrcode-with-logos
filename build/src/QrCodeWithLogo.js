@@ -2,8 +2,8 @@
 /*
  * @Author: super
  * @Date: 2019-06-27 16:29:31
- * @Last Modified by: suporka
- * @Last Modified time: 2020-03-04 12:24:50
+ * @Last Modified by: John Carmichael
+ * @Last Modified time: 2024-05-22
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 const toCanvas_1 = require("./toCanvas");
