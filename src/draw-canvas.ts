@@ -4,11 +4,9 @@
  * @Last Modified by: super
  * @Last Modified time: 2019-06-27 17:40:58
  */
-import { BaseOptions, NodeQrCodeOptions } from "./model";
-import { promisify } from "./utils";
-// @ts-ignore
-// import QRCode from "qrcode"
-const QRCode = require("qrcode")
+import { BaseOptions, NodeQrCodeOptions } from './model';
+import { promisify } from './utils';
+import QRCode from 'qrcode';
 
 const toCanvas = promisify(QRCode.toCanvas);
 
@@ -38,7 +36,7 @@ const getOriginWidth = (
   content: string,
   nodeQrCodeOption: NodeQrCodeOptions
 ) => {
-  const _canvas = document.createElement("canvas");
+  const _canvas = document.createElement('canvas');
   // @ts-ignore
   return toCanvas(_canvas, content, nodeQrCodeOption).then(() => _canvas.width);
 };
@@ -47,10 +45,10 @@ const getOriginWidth = (
 // Increase the fault tolerance for QrCode with less content
 const getErrorCorrectionLevel = (content: string): string => {
   if (content.length > 36) {
-    return "M";
+    return 'M';
   } else if (content.length > 16) {
-    return "Q";
+    return 'Q';
   } else {
-    return "H";
+    return 'H';
   }
 };

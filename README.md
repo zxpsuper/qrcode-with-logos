@@ -1,8 +1,12 @@
 # qrcode-with-logos 
 
-![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos)  ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat-square)
-
-![QRcode-with-logos](https://github.com/zxpsuper/qrcode-with-logos/raw/master/demo.png)
+## FORKED
+Original package: https://github.com/zxpsuper/qrcode-with-logos
+Forked changed:
+- no rollup, build with just typescript
+- updated dependencies and dev deps
+- updated configs
+- removed redundant code and files
 
 ## Introduction
 
@@ -14,10 +18,45 @@ It can create a canvas or a image for the QRcode and even you can use the method
 
 ## Usage
 
-- Install the module
-
+Install
 ```
-npm install qrcode-with-logos --save
+npm i qrcode-with-logos
+```
+
+Import
+```
+import QrCodeWithLogo from 'qrcode-with-logos';
+```
+
+Write the output to a canvas on page:
+```
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+
+  new QrCodeWithLogo({
+    canvas: canvas,
+    content: props.qrValue,
+    width: 380,
+    logo: {
+      src: 'https://avatars1.githubusercontent.com/u/28730619?s=460&v=4',
+    },
+  });
+```
+
+Output to an image:
+```
+  const qrcode = new QrCodeWithLogo({
+    content: 'some value, for example, a URL goes here',
+    width: 380,
+    logo: {
+      src: 'https://avatars1.githubusercontent.com/u/28730619?s=460&v=4',
+    },
+  });
+
+  qrcode
+    .getImage()
+    .then(() => {
+      qrcode.downloadImage('myqrcode');
+    });
 ```
 
 ## Options
@@ -59,21 +98,6 @@ Type: `Boolean`
 Default: `false`
 
 You can set the value to be true to download the file immediately.
-
-Examplate
-
-```js
-new QrCodeWithLogo({
-  canvas: document.getElementById("canvas"),
-  content: "https://github.com/zxpsuper",
-  width: 380,
-  download: true,
-  image: document.getElementById("image"),
-  logo: {
-    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
-  }
-})
-```
 
 ### `downloadName`
 
@@ -207,6 +231,7 @@ qrcode.getImage().then(image => {
 });
 
 ```
+
 ## Example
 
 ```html

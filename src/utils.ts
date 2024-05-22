@@ -39,12 +39,3 @@ export function isFunction(o: any): boolean {
 export function isString(o: any): boolean {
   return typeof o === "string";
 }
-
-/**
- * 判斷是不是 image dom 節點
- * Determine if it is a dom
- * @param o image dom 節點
- */
-export function isImageDom(o: any): boolean {
-  return o && ["IMAGE", "IMG"].includes(o.tagName);
-}

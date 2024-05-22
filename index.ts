@@ -1,2 +1,2 @@
-import QrCodeWithLogo from './src/index'
+import QrCodeWithLogo from './src/QrCodeWithLogo'
 export default QrCodeWithLogo

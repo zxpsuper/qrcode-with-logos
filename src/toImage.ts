@@ -7,7 +7,7 @@
 import { BaseOptions, Logo } from './model'
 import { toCanvas } from './toCanvas'
 import { isFunction, isString } from './utils'
-import QrCodeWithLogo from '.'
+import QrCodeWithLogo from './QrCodeWithLogo';
 
 export const toImage = async function (options: BaseOptions, instance: QrCodeWithLogo) {
   const { canvas } = options
@@ -18,7 +18,7 @@ export const toImage = async function (options: BaseOptions, instance: QrCodeWit
     ;(options.logo as Logo).crossOrigin = 'Anonymous'
   }
 
-  if (!instance.ifCanvasDrawed) await toCanvas(options)
+  if (!instance.ifCanvasDrawn) await toCanvas(options)
 
   const { image, downloadName = 'qr-code' } = options
   let { download } = options
