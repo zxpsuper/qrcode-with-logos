@@ -5,8 +5,7 @@
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "scripts": {
-    "build": "rimraf -rf ./build && tsc -p . -d --declarationDir build",
-    "prepare": "npm run build"
+    "build": "rimraf -rf ./build && tsc -p . -d --declarationDir build"
   },
   "dependencies": {
     "qrcode": "^1.5.3"
