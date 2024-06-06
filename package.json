@@ -1,6 +1,6 @@
 {
   "name": "qrcode-with-logos",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "main": "lib/qrcode-with-logos.common.js",
   "types": "types/index.d.ts",
