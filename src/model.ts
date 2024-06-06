@@ -28,4 +28,5 @@ export interface BaseOptions {
   image?: HTMLImageElement;
   download?: boolean | Function;
   downloadName?: string;
+  text?: string
 }

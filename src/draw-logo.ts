@@ -7,18 +7,19 @@
 import { BaseOptions, Logo } from "./model";
 import { isString } from "./utils";
 
-export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
+export const drawLogo = ({ canvas, logo, text }: BaseOptions): Promise<void> => {
 
   if (!logo) return Promise.resolve();
 
   if (logo === '') return Promise.resolve();
 
   const canvasWidth = canvas!.width;
+  const canvasHeight = canvas!.height;
 
   if (isString(logo)) {
     logo = { src: logo } as Logo;
   }
-  
+
   const {
     logoSize = 0.15,
     borderColor = "#ffffff",
@@ -63,7 +64,7 @@ export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
   // Use canvas to draw more features, such as borderRadius
   const drawLogoWithCanvas = (image: HTMLImageElement) => {
     const canvasImage = document.createElement("canvas");
-    
+
     canvasImage.width = logoXY + logoWidth;
     canvasImage.height = logoXY + logoWidth;
     canvasImage
@@ -81,6 +82,15 @@ export const drawLogo = ({ canvas, logo }: BaseOptions): Promise<void> => {
   return new Promise((resolve, reject) => {
     image.onload = () => {
       logoRadius ? drawLogoWithCanvas(image) : drawLogoWithImage(image);
+
+      // Draw the text below the QR code if text is provided
+      if (text) {
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#000000"; // You can change the color if needed
+        ctx.fillText(text, canvasWidth / 2, canvasHeight - 10); // Adjust the position as needed
+      }
+
       resolve();
     };
     image.onerror = () => {
