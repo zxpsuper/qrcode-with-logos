@@ -28,5 +28,10 @@ export interface BaseOptions {
   image?: HTMLImageElement;
   download?: boolean | Function;
   downloadName?: string;
-  text?: string
+  text?: {
+    text: string,
+    font?: string,
+    colorHexCode?: string,
+    positionOffset?: number
+  }
 }

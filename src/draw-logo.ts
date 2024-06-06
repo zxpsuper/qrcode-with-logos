@@ -4,8 +4,8 @@
  * @Last Modified by: suporka
  * @Last Modified time: 2020-03-04 12:23:09
  */
-import { BaseOptions, Logo } from "./model";
-import { isString } from "./utils";
+import { BaseOptions, Logo } from './model';
+import { isString } from './utils';
 
 export const drawLogo = ({ canvas, logo, text }: BaseOptions): Promise<void> => {
 
@@ -22,21 +22,21 @@ export const drawLogo = ({ canvas, logo, text }: BaseOptions): Promise<void> => 
 
   const {
     logoSize = 0.15,
-    borderColor = "#ffffff",
-    bgColor = borderColor || "#ffffff",
+    borderColor = '#ffffff',
+    bgColor = borderColor || '#ffffff',
     borderSize = 0.05,
     crossOrigin,
     borderRadius = 8,
     logoRadius = 0
   } = logo as Logo;
 
-  let logoSrc = typeof logo === "string" ? logo : logo.src;
+  let logoSrc = typeof logo === 'string' ? logo : logo.src;
   let logoWidth = canvasWidth * logoSize;
   let logoXY = (canvasWidth * (1 - logoSize)) / 2;
   let logoBgWidth = canvasWidth * (logoSize + borderSize);
   let logoBgXY = (canvasWidth * (1 - logoSize - borderSize)) / 2;
 
-  const ctx = canvas!.getContext("2d") as CanvasRenderingContext2D ;
+  const ctx = canvas!.getContext('2d') as CanvasRenderingContext2D;
 
   // logo 底色, draw logo background color
   canvasRoundRect(ctx)(
@@ -51,7 +51,7 @@ export const drawLogo = ({ canvas, logo, text }: BaseOptions): Promise<void> => 
 
   // logo
   const image = new Image();
-  image.setAttribute("crossOrigin", crossOrigin || "anonymous");
+  image.setAttribute('crossOrigin', crossOrigin || 'anonymous');
   image.src = logoSrc;
 
   // 使用image绘制可以避免某些跨域情况
@@ -63,17 +63,17 @@ export const drawLogo = ({ canvas, logo, text }: BaseOptions): Promise<void> => 
   // 使用canvas绘制以获得更多的功能
   // Use canvas to draw more features, such as borderRadius
   const drawLogoWithCanvas = (image: HTMLImageElement) => {
-    const canvasImage = document.createElement("canvas");
+    const canvasImage = document.createElement('canvas');
 
     canvasImage.width = logoXY + logoWidth;
     canvasImage.height = logoXY + logoWidth;
     canvasImage
-      .getContext("2d")!
+      .getContext('2d')!
       .drawImage(image, logoXY, logoXY, logoWidth, logoWidth);
 
     canvasRoundRect(ctx)(logoXY, logoXY, logoWidth, logoWidth, logoRadius);
     // @ts-ignore
-    ctx.fillStyle = ctx.createPattern(canvasImage, "no-repeat");
+    ctx.fillStyle = ctx.createPattern(canvasImage, 'no-repeat');
     ctx.fill();
   };
 
@@ -85,16 +85,17 @@ export const drawLogo = ({ canvas, logo, text }: BaseOptions): Promise<void> => 
 
       // Draw the text below the QR code if text is provided
       if (text) {
-        ctx.font = "16px Arial";
-        ctx.textAlign = "center";
-        ctx.fillStyle = "#000000"; // You can change the color if needed
-        ctx.fillText(text, canvasWidth / 2, canvasHeight - 10); // Adjust the position as needed
+        const offset = text.positionOffset || 10;
+        ctx.font = text.font || '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = text.colorHexCode || '#000000';
+        ctx.fillText(text.text, canvasWidth / 2, canvasHeight - offset);
       }
 
       resolve();
     };
     image.onerror = () => {
-      reject('logo load fail!')
+      reject('logo load fail!');
     };
   });
 };

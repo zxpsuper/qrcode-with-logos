@@ -135,6 +135,26 @@ Type `String`-- qrcode color value of dark
 
 Type `String`-- qrcode color value of light
 
+### `text`
+
+Type: `Object` (optional)
+
+`text.text` (required)
+
+Type `String` -- The text to add to the QR code
+
+`text.font` (optional)
+
+Type `String` -- The font to use, defaults to '16px Arial'
+
+`text.colorHexCode` (optional)
+
+Type `String` -- The font colour to use, defaults to '#000000'
+
+`text.positionOffset` (optional)
+
+Type `Number` -- The offset position relative to the bottom, defaults to 10
+
 ### `logo`
 
 Type: `Object`
