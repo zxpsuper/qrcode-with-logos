@@ -2,12 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.drawLogo = void 0;
 const utils_1 = require("./utils");
-const drawLogo = ({ canvas, logo }) => {
+const drawLogo = ({ canvas, logo, text }) => {
     if (!logo)
         return Promise.resolve();
     if (logo === '')
         return Promise.resolve();
     const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
     if ((0, utils_1.isString)(logo)) {
         logo = { src: logo };
     }
@@ -50,6 +51,13 @@ const drawLogo = ({ canvas, logo }) => {
     return new Promise((resolve, reject) => {
         image.onload = () => {
             logoRadius ? drawLogoWithCanvas(image) : drawLogoWithImage(image);
+            // Draw the text below the QR code if text is provided
+            if (text) {
+                ctx.font = "16px Arial";
+                ctx.textAlign = "center";
+                ctx.fillStyle = "#000000"; // You can change the color if needed
+                ctx.fillText(text, canvasWidth / 2, canvasHeight - 10); // Adjust the position as needed
+            }
             resolve();
         };
         image.onerror = () => {
