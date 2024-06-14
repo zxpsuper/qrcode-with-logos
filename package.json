@@ -12,6 +12,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel ./index.html",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "build:type": "tsc --module commonjs",
     "build": "npm run build:min && npm run build:rollup",
     "build:rollup": "rollup -c",
@@ -38,6 +41,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "devDependencies": {
+    "element-plus": "^2.7.5",
     "parcel-bundler": "^1.12.4",
     "rollup": "^2.33.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -50,6 +54,7 @@
     "tslib": "^2.0.3",
     "typescript": "^3.5.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
+    "vitepress": "^1.2.3",
     "webpack": "^4.35.0",
     "webpack-cli": "^3.3.5"
   },

@@ -1,62 +1,106 @@
-/*
- * @Author: super
- * @Date: 2019-06-27 16:29:31
- * @Last Modified by: suporka
- * @Last Modified time: 2020-03-04 12:24:50
- */
-
-import { BaseOptions } from "./model";
-import { toCanvas } from "./toCanvas";
-import { toImage, saveImage } from "./toImage";
-import { version } from '../package.json';
-
+import { QRCanvas } from './core/QRCanvas'
+import defaultOptions from './core/defaultOptions'
+import { toImage, saveImage, isFunction } from './core/utils'
+import { BaseOptions } from './core/types'
+import { version } from '../package.json'
 class QrCodeWithLogo {
-
   static version: string = version
-
-  option: BaseOptions;
+  options: BaseOptions
   ifCanvasDrawed: boolean = false
   ifImageCreated: boolean = false
+  drawImagePromiseResolve: Function[] = []
+  drawCanvasPromiseResolve: Function[] = []
+
+  private drawImagePromise() {
+    if (this.ifImageCreated) return Promise.resolve()
+    return new Promise((resolve) => {
+      this.drawImagePromiseResolve.push(resolve)
+    })
+  }
+
+  private drawCanvasPromise() {
+    if (this.ifCanvasDrawed) return Promise.resolve()
+    return new Promise((resolve) => {
+      this.drawCanvasPromiseResolve.push(resolve)
+    })
+  }
 
   private defaultOption: BaseOptions = {
     canvas: undefined,
     image: undefined,
-    content: ''
+    content: '',
+    width: defaultOptions.width,
+    download: defaultOptions.download,
+    downloadName: defaultOptions.downloadName
   }
 
-  constructor(option: BaseOptions) {
-    this.option = Object.assign(this.defaultOption, option);
-    if (!this.option.canvas) this.option.canvas = document.createElement("canvas")
-    if (!this.option.image) this.option.image = document.createElement("img")
-    this.toCanvas().then(this.toImage.bind(this))
-  }
-
-  private toCanvas(): Promise<void> {
-    return toCanvas.call(this, this.option).then(() => {
-      this.ifCanvasDrawed = true
-      return Promise.resolve()
+  constructor(options: BaseOptions) {
+    this.options = Object.assign(this.defaultOption, options)
+    if (!this.options.canvas)
+      this.options.canvas = document.createElement('canvas')
+    if (!this.options.image) this.options.image = document.createElement('img')
+    this._toCanvas().then(() => {
+      return this._toImage()
     })
-  };
-
-  private toImage(): Promise<void> {
-    return toImage(this.option, this);
   }
 
-  public async downloadImage(name: string = 'qrcode.png') {
-    if (!this.ifImageCreated) await this.toImage()
-    return saveImage(this.option.image!, name);
+  /**
+   * Deprecated!
+   */
+  toCanvas() {
+    throw new Error('toCanvas has been Deprecated!')
+  }
+
+  /**
+   * Deprecated!
+   */
+  toImage() {
+    throw new Error('toImage has been Deprecated!')
+  }
+
+  /**
+   * draw canvas
+   * @returns
+   */
+  private _toCanvas(): Promise<void> {
+    this.drawCanvasPromise()
+    const qrCanvas = new QRCanvas(this.options)
+    return qrCanvas.init().then(() => {
+      this.ifCanvasDrawed = true
+      this.drawCanvasPromiseResolve.forEach((fn) => {
+        if (isFunction(fn)) fn()
+      })
+    })
+  }
+
+  /**
+   * Get image base64 and set image's src attribute .
+   * @returns
+   */
+  private async _toImage(): Promise<void> {
+    this.drawImagePromise()
+    return toImage(this.options).then(() => {
+      this.ifImageCreated = true
+      this.drawImagePromiseResolve.forEach((fn) => {
+        if (isFunction(fn)) fn()
+      })
+    })
+  }
+
+  public async downloadImage(name: string = 'qr-code.png') {
+    await this.drawImagePromise()
+    return saveImage(this.options.image!, name)
   }
 
   public async getImage(): Promise<HTMLImageElement> {
-    if (!this.ifImageCreated) await this.toImage()
-    return this.option.image!
+    await this.drawImagePromise()
+    return this.options.image!
   }
 
   public async getCanvas(): Promise<HTMLCanvasElement> {
-    if (!this.ifCanvasDrawed) await this.toCanvas()
-    return this.option.canvas!
+    await this.drawCanvasPromise()
+    return this.options.canvas!
   }
-
 }
 
-export default QrCodeWithLogo;
+export default QrCodeWithLogo

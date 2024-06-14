@@ -1,9 +1,14 @@
+.cache/
+.github/
+docs/
 dist/
 src/
 .gitignore
 .npmignore
 .npmrc
 index.html
+index.ts
+index.css
 demo.png
 index.ts
 rollup.config.js
