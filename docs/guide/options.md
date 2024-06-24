@@ -79,7 +79,7 @@ qrcode margin
 - Type: `string`
 - Default: according to content length and auto choose.
 
-qrcode errorCorrectionLevel, such as "M", "Q", "H"
+qrcode errorCorrectionLevel, such as "L", "M", "Q", "H"
 
 ### nodeQrCodeOptions.color
 

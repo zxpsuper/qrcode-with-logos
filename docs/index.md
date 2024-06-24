@@ -5,7 +5,7 @@ layout: home
 hero:
   name: qrcode-with-logos
   # text: QRcode-with-logos is a tool for creating a QRcode with a logo.
-  tagline: A tool for creating a QRcode with a logo. 
+  tagline: A library for generating QR codes with a logo and styling. 
   # image:
   #   src: /logo.png
   #   alt: qrcode-with-logos
@@ -21,7 +21,7 @@ hero:
 ![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos)  ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat-square)
 
 
-Qrcode-with-logos is a tool for creating a QRcode with a logo in your object.
+Qrcode-with-logos is a library for generating QR codes with a logo and styling in your object.
 
 It depend on `qrcode@1.5.3` and be more powerful than qrcode.
 
