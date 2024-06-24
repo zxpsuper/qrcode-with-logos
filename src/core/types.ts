@@ -70,6 +70,7 @@ export interface Logo {
   borderSize?: number
   bgColor?: string
   crossOrigin?: string
+  borderWidth?: number
 }
 
 export interface NodeQrCodeOptions {

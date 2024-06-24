@@ -2,7 +2,8 @@ export default {
   logo: {
     logoSize: 0.15,
     borderSize: 0.05,
-    borderColor: '#fff',
+    bgColor: '#fff',
+    borderWidth: 10,
     crossOrigin: 'anonymous',
     borderRadius: 8,
     logoRadius: 0
