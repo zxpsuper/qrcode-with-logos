@@ -70,6 +70,7 @@ class QrCodeWithLogo {
       this.drawCanvasPromiseResolve.forEach((fn) => {
         if (isFunction(fn)) fn()
       })
+      this.drawCanvasPromiseResolve.length = 0
     })
   }
 
@@ -84,10 +85,11 @@ class QrCodeWithLogo {
       this.drawImagePromiseResolve.forEach((fn) => {
         if (isFunction(fn)) fn()
       })
+      this.drawImagePromiseResolve.length = 0
     })
   }
-
-  public async downloadImage(name: string = 'qr-code.png') {
+  
+  public async downloadImage(name: string = defaultOptions.downloadName) {
     await this.drawImagePromise()
     return saveImage(this.options.image!, name)
   }

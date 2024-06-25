@@ -2,15 +2,17 @@
 
 ![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos)  ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat-square)
 
-![QRcode-with-logos](https://github.com/zxpsuper/qrcode-with-logos/raw/master/demo.png)
+<img src="./images/qr-code.png" width="200">
+<img src="./images/qr-code2.png" width="200">
+<img src="./images/qr-code3.png" width="200">
 
 ## Introduction
 
-QRcode-with-logos is a tool for creating a QRcode with a logo in your object.
+Qrcode-with-logos is a library for generating QR codes with a logo and styling in your object.
 
 It depend on `qrcode` dependence and be more powerful than `qrcode`.
 
-It can create a canvas or a image for the QRcode and even you can use the method to download the file you want.
+It can create a canvas or a image for the QRcode and even you can use the method to download the file that you want.
 
 ## Usage
 
@@ -22,7 +24,7 @@ npm install qrcode-with-logos --save
 
 ## Documentation
 
-visit [qrcode-with-logos](https://zxpsuper.github.io/qrcode-with-logos/)
+Visit [https://zxpsuper.github.io/qrcode-with-logos](https://zxpsuper.github.io/qrcode-with-logos/)!
 ## Example
 
 ```html

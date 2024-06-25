@@ -58,4 +58,12 @@ qrcode.getImage().then(image => {
 });
 ```
 
+
+## toCanvas()
+
+- `Deprecated`
+
+## toImage()
+- `Deprecated`
+
 <Tongji/>

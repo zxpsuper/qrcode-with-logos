@@ -42,9 +42,9 @@ if download is a funciton, you can use it like:
 
 ```js
 new QrCodeWithLogo({
-  content: "https://github.com/zxpsuper",
+  content: 'https://github.com/zxpsuper',
   logo: {
-    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
+    src: 'https://avatars1.githubusercontent.com/u/28730619?s=460&v=4'
   },
   download(downloadFn) {
     // you can choose when to start download by downloadFn...
@@ -52,7 +52,7 @@ new QrCodeWithLogo({
       // do what you want to do after download image!
     })
   }
-});
+})
 ```
 
 ## downloadName
@@ -116,22 +116,25 @@ qrcode color value of light
 
 ### logo.logoSize
 
-- Type Number
-- Default: `0.15`, between 0 ~ 1
+- `Deprecated`
 
-It is the scale to qrcode width
+It can auto calculate logoSize now!
+
+### logo.borderSize
+
+- `Deprecated`
+
+You are recommended to use **borderWidth**!
+
+### logo.borderWidth
+
+- Type: `number`
+- Default: `10`
 
 ### logo.borderRadius
 
 - Type: `number`
 - Default: `8`
-
-### logo.borderSize
-
-- Type: `number`
-- Default: `0.05`, between 0 ~ 1
-
-It is the scale to qrcode.
 
 ### logo.bgColor
 
@@ -174,17 +177,19 @@ It is the logo background color
 - Type: `object`
 
 ### cornersOptions.type
+
 - Type: `"square"
-  | "rounded"
-  | "circle"
-  | "rounded-circle"
-  | "circle-rounded"
-  | "circle-star"
-  | "circle-diamond"`
+| "rounded"
+| "circle"
+| "rounded-circle"
+| "circle-rounded"
+| "circle-star"
+| "circle-diamond"`
 
 - Default: `square`
 
 ### cornersOptions.color
+
 - Type: `string`
 - Default: `#000000`
 
@@ -203,6 +208,5 @@ It is the corners rounded radius. It is Effective when cornersOptions.type inclu
 
 - Type: `number`
 - Default: `cellSize / 2`
-
 
 <Tongji/>
