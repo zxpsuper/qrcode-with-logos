@@ -4,8 +4,8 @@ declare class QrCodeWithLogo {
     options: BaseOptions;
     ifCanvasDrawed: boolean;
     ifImageCreated: boolean;
-    drawImagePromiseResolve: Function[];
-    drawCanvasPromiseResolve: Function[];
+    private drawImagePromiseResolve;
+    private drawCanvasPromiseResolve;
     private drawImagePromise;
     private drawCanvasPromise;
     private defaultOption;

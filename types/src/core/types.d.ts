@@ -1,38 +1,49 @@
-export declare type DrawArgs = {
+export type DrawArgs = {
     x: number;
     y: number;
     size: number;
-    rotation?: number;
     getNeighbor?: GetNeighbor;
 };
-export declare type RotateFigureArgs = {
+export type RotateFigureArgs = {
     x: number;
     y: number;
     size: number;
     rotation?: number;
     draw: () => void;
 };
-export declare type BasicFigureDrawArgs = {
+export type BasicCornerDrawArgs = {
+    x: number;
+    y: number;
+    dotSize: number;
+    radius?: number | {
+        inner?: number;
+        outer?: number;
+    };
+};
+export type RotationCornerDrawArgs = BasicCornerDrawArgs & {
+    rotation?: number;
+};
+export type BasicFigureDrawArgs = {
     x: number;
     y: number;
     size: number;
     rotation?: number;
 };
-export declare type GetNeighbor = (x: number, y: number) => boolean;
-export declare type DrawArgsCanvas = DrawArgs & {
+export type GetNeighbor = (x: number, y: number) => boolean;
+export type DrawArgsCanvas = DrawArgs & {
     context: CanvasRenderingContext2D;
 };
-export declare type DrawDotArgsCanvas = DrawArgsCanvas & {
+export type DrawDotArgsCanvas = DrawArgsCanvas & {
     dotRate?: number;
 };
-export declare type BasicFigureDrawArgsCanvas = BasicFigureDrawArgs & {
+export type BasicFigureDrawArgsCanvas = BasicFigureDrawArgs & {
     context: CanvasRenderingContext2D;
 };
-export declare type RotateFigureArgsCanvas = RotateFigureArgs & {
+export type RotateFigureArgsCanvas = RotateFigureArgs & {
     context: CanvasRenderingContext2D;
 };
-export declare type DotType = 'dot' | 'dot-small' | 'tile' | 'rounded' | 'square' | 'diamond' | 'star' | 'fluid' | 'fluid-line' | 'stripe' | 'stripe-column';
-export declare type CornerType = 'square' | 'rounded' | 'circle' | 'rounded-circle' | 'circle-rounded' | 'circle-star' | 'circle-diamond';
+export type DotType = 'dot' | 'dot-small' | 'tile' | 'rounded' | 'square' | 'diamond' | 'star' | 'fluid' | 'fluid-line' | 'stripe' | 'stripe-column';
+export type CornerType = 'square' | 'rounded' | 'circle' | 'rounded-circle' | 'circle-rounded' | 'circle-star' | 'circle-diamond';
 export interface Logo {
     src: string;
     logoRadius?: number;
@@ -42,14 +53,16 @@ export interface Logo {
     borderSize?: number;
     bgColor?: string;
     crossOrigin?: string;
+    borderWidth?: number;
 }
+export type ErrorCorrectionLevel = 'L' | 'Q' | 'M' | 'H';
 export interface NodeQrCodeOptions {
     margin?: number;
     color?: {
         dark?: string;
         light?: string;
     };
-    errorCorrectionLevel?: string;
+    errorCorrectionLevel?: ErrorCorrectionLevel;
     scale?: any;
 }
 export interface BaseOptions {
@@ -73,4 +86,5 @@ export interface BaseOptions {
             outer: number;
         };
     };
+    onError?: (err: Error) => void;
 }

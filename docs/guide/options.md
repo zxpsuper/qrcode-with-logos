@@ -63,6 +63,14 @@ new QrCodeWithLogo({
 
 Set the download file name, should be used with the download property.
 
+## onError
+
+- Type: `(err) => void`
+
+- Default: `null`
+
+Catch error and handle it!
+
 ## nodeQrCodeOptions
 
 - Type: `object`
@@ -101,6 +109,9 @@ qrcode color value of dark
 
 qrcode color value of light
 
+> [!TIP]
+> If you want a transparent background, please set light equal to '#00000000'
+
 ## logo
 
 - Type: `object` | `string`
@@ -124,7 +135,9 @@ It can auto calculate logoSize now!
 
 - `Deprecated`
 
-You are recommended to use **borderWidth**!
+> [!WARNING]
+> You are recommended to use **borderWidth** instead of borderSize!
+
 
 ### logo.borderWidth
 
@@ -202,11 +215,11 @@ It is the corners rounded radius. It is Effective when cornersOptions.type inclu
 #### cornersOptions.radius.inner
 
 - Type: `number`
-- Default: `cellSize / 4`
+- Default: `dotSize / 4`
 
 #### cornersOptions.radius.outer
 
 - Type: `number`
-- Default: `cellSize / 2`
+- Default: `dotSize / 2`
 
 <Tongji/>

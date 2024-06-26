@@ -6,6 +6,7 @@ import {
   GetNeighbor,
   RotateFigureArgsCanvas
 } from './types'
+import { canvasRoundRect } from './utils'
 
 interface DotTypes {
   [key: string]: DotType
@@ -25,21 +26,22 @@ const dotTypes = {
   stripeColumn: 'stripe-column'
 } as DotTypes
 
+type QRDotOptions = {
+  context: CanvasRenderingContext2D
+  type: DotType
+  dotSize: number
+}
 export default class QRDot {
   _context: CanvasRenderingContext2D
   _type: DotType
-  constructor({
-    context,
-    type
-  }: {
-    context: CanvasRenderingContext2D
-    type: DotType
-  }) {
-    this._context = context
-    this._type = type
+  dotSize: number
+  constructor(options: QRDotOptions) {
+    this._context = options.context
+    this._type = options.type
+    this.dotSize = options.dotSize
   }
 
-  draw(x: number, y: number, size: number, getNeighbor: GetNeighbor): void {
+  draw(x: number, y: number, getNeighbor: GetNeighbor): void {
     const context = this._context
     const type = this._type
     let drawFunction
@@ -80,14 +82,14 @@ export default class QRDot {
         break
     }
 
-    drawFunction.call(this, { x, y, size, context, getNeighbor })
+    drawFunction.call(this, { x, y, size: this.dotSize, context, getNeighbor })
   }
 
   _drawSquare({ x, y, size, context }: DrawArgsCanvas) {
     this._basicSquare({ x, y, size, context, rotation: 0 })
   }
 
-  _basicSquare(args: BasicFigureDrawArgsCanvas): void {
+  _basicSquare(args: BasicFigureDrawArgsCanvas) {
     const { size, context } = args
 
     this._rotateFigure({
@@ -118,53 +120,11 @@ export default class QRDot {
     size = 0.75 * size
     x += (1 / 8) * size
     y += (1 / 8) * size
-    const radius = [size / 4, size / 4, size / 4, size / 4]
-    const rTopLeft = radius[0] || 0
-    const rTopRight = radius[1] || 0
-    const rBottomRight = radius[2] || 0
-    const rBottomLeft = radius[3] || 0
-
-    context.beginPath()
-
     const cx = x + size / 2
     const cy = y + size / 2
     const originX = -size / 2
     context.translate(cx, cy)
-
-    context.moveTo(originX + rTopLeft, originX)
-
-    context.lineTo(originX + size - rTopRight, originX)
-    if (rTopRight)
-      context.quadraticCurveTo(
-        originX + size,
-        originX,
-        originX + size,
-        originX + rTopRight
-      )
-
-    context.lineTo(originX + size, originX + size - rBottomRight)
-    if (rBottomRight)
-      context.quadraticCurveTo(
-        originX + size,
-        originX + size,
-        originX + size - rBottomRight,
-        originX + size
-      )
-
-    context.lineTo(originX + rBottomLeft, originX + size)
-    if (rBottomLeft)
-      context.quadraticCurveTo(
-        originX,
-        originX + size,
-        originX,
-        originX + size - rBottomLeft
-      )
-
-    context.lineTo(originX, originX + rTopLeft)
-    if (rTopLeft)
-      context.quadraticCurveTo(originX, originX, originX + rTopLeft, originX)
-    context.closePath()
-    context.stroke()
+    canvasRoundRect(context)(originX, originX, size,size, size / 4)
     context.fill()
     context.translate(-cx, -cy)
   }
@@ -252,9 +212,11 @@ export default class QRDot {
     }
     context.translate(-cx, -cy)
   }
+
   _drawStripeColumn(args: DrawArgsCanvas) {
     this._drawStripe(args, 'column')
   }
+
   _drawStripe(
     { x, y, size, context, getNeighbor }: DrawArgsCanvas,
     type: 'row' | 'column' = 'row'
@@ -283,6 +245,7 @@ export default class QRDot {
     }
     context.translate(-cx, -cy)
   }
+
   _rotateFigure({
     x,
     y,
@@ -290,7 +253,7 @@ export default class QRDot {
     context,
     rotation = 0,
     draw
-  }: RotateFigureArgsCanvas): void {
+  }: RotateFigureArgsCanvas) {
     const cx = x + size / 2
     const cy = y + size / 2
     context.translate(cx, cy)

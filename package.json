@@ -1,6 +1,6 @@
 {
   "name": "qrcode-with-logos",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "",
   "main": "lib/qrcode-with-logos.common.js",
   "types": "types/index.d.ts",
@@ -51,7 +51,7 @@
     "rollup-plugin-typescript": "^1.0.1",
     "ts-loader": "^8.0.12",
     "tslib": "^2.0.3",
-    "typescript": "^3.5.2",
+    "typescript": "^5.5.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "vitepress": "^1.2.3",
     "webpack": "^4.35.0",

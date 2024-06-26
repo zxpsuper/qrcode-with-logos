@@ -97,8 +97,10 @@ You also can set the different type of dots and corners respectively!
 If you have some question or advise, you can send me a E-mail(zxpscau@163.com) or open an [issue](https://github.com/zxpsuper/qrcode-with-logos/issues/new).
 
 <script>
-  import Qrcode from '../src/index'
-  // import Qrcode from '../lib/qrcode-with-logos.esm'
+  // import Qrcode from '../src/index'
+  import Qrcode from '../lib/qrcode-with-logos.esm'
+  // import Qrcode from '../lib/qrcode-with-logos.common'
+  // import Qrcode from '../lib/qrcode-with-logos.min'
 
   function getBlobURL(blob) {
     if (!blob) return ''
@@ -157,26 +159,30 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
     },
     methods: {
       createQrcode1(download = false) {
-        const qr = new Qrcode({
-          image: document.getElementById('canvas1'),
-          content: 'https://github.com/zxpsuper',
-          width: 1024,
-          download,
-          logo: {
-            src: this.logo
-          },
-          dotsOptions: {
-            color: this.dotColor,
-            type: this.dotType
-          },
-          cornersOptions: {
-            color: this.cornerColor,
-            type: this.cornerType
-          },
-          nodeQrCodeOptions: {
-            margin: 20
-          }
-        })
+        try {
+          const qr = new Qrcode({
+            image: document.getElementById('canvas1'),
+            content: 'https://github.com/zxpsuper',
+            width: 1024,
+            download,
+            logo: {
+              src: this.logo
+            },
+            dotsOptions: {
+              color: this.dotColor,
+              type: this.dotType
+            },
+            cornersOptions: {
+              color: this.cornerColor,
+              type: this.cornerType
+            },
+            nodeQrCodeOptions: {
+              margin: 20
+            }
+          })
+        } catch (err) {
+          console.log(err)
+        }
       },
       beforeUpload(file) {
         const url = getBlobURL(file)

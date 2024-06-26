@@ -15,7 +15,7 @@
     "downlevelIteration": true,
     "typeRoots": ["node_modules/@types"],
     "skipLibCheck": true,
-    "emitDeclarationOnly": true, // rollup 构建时需注释
+    // "emitDeclarationOnly": true, // rollup 构建时需注释
     "resolveJsonModule": true
   },
   "include": ["index.ts"]

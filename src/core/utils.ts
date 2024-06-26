@@ -1,7 +1,8 @@
-import { BaseOptions } from '../model'
-// 对于内容少的QrCode，增大容错率
+import { BaseOptions, ErrorCorrectionLevel } from './types'
+
+// 對於内容少的qrcode，增大容錯率
 // Increase the fault tolerance for QrCode with less content
-export function getErrorCorrectionLevel(content: string): string {
+export function getErrorCorrectionLevel(content: string): ErrorCorrectionLevel {
   if (content.length > 36) {
     return 'M'
   } else if (content.length > 16) {
@@ -11,6 +12,13 @@ export function getErrorCorrectionLevel(content: string): string {
   }
 }
 
+/**
+ * load image, resolve image
+ * 加載圖片
+ * @param logoSrc
+ * @param crossOrigin
+ * @returns
+ */
 export function loadImage(
   logoSrc: string,
   crossOrigin: string
@@ -30,6 +38,7 @@ export function loadImage(
 
 /**
  * draw radius
+ * 繪製帶圓角的綫條
  * @param ctx
  * @returns
  */
@@ -61,43 +70,37 @@ export function isFunction(o: any): boolean {
 
 /**
  * canvas get base64 url and set image src value, if need download image, auto download image
+ * 獲取 canvas base64 並賦值給 image 的 src 屬性
  * @param options
  * @returns
  */
 export const toImage = async function (options: BaseOptions) {
-  const { canvas } = options
-
+  let { canvas, download } = options
   const { image, downloadName } = options
-  let { download } = options
-
   if (canvas!.toDataURL()) {
     image!.src = canvas!.toDataURL()
   } else {
     throw new Error('Can not get the canvas DataURL')
   }
-
   if (download !== true && !isFunction(download)) {
     return
   }
-
+  // download also can be a function
   download =
     download === true ? (start: Function): Promise<void> => start() : download
-
   const startDownload = () => {
     return saveImage(image!, downloadName)
   }
-
   if (download) {
     return download(startDownload)
   }
-
   return Promise.resolve()
 }
 
 /**
- * save image
- * @param image
- * @param name
+ * save image 保存圖片
+ * @param image HTMLImageElement
+ * @param name image name
  * @returns
  */
 export const saveImage = (

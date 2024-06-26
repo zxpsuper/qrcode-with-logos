@@ -2,7 +2,6 @@ export type DrawArgs = {
   x: number
   y: number
   size: number
-  rotation?: number
   getNeighbor?: GetNeighbor
 }
 
@@ -12,6 +11,20 @@ export type RotateFigureArgs = {
   size: number
   rotation?: number
   draw: () => void
+}
+
+export type BasicCornerDrawArgs = {
+  x: number
+  y: number
+  dotSize: number
+  radius?: number | {
+    inner?: number
+    outer?: number
+  }
+}
+
+export type RotationCornerDrawArgs = BasicCornerDrawArgs & {
+  rotation?: number
 }
 
 export type BasicFigureDrawArgs = {
@@ -72,14 +85,14 @@ export interface Logo {
   crossOrigin?: string
   borderWidth?: number
 }
-
+export type ErrorCorrectionLevel = 'L' | 'Q' | 'M' | 'H'
 export interface NodeQrCodeOptions {
   margin?: number
   color?: {
     dark?: string
     light?: string
   }
-  errorCorrectionLevel?: string
+  errorCorrectionLevel?: ErrorCorrectionLevel
   scale?: any
 }
 
@@ -106,4 +119,5 @@ export interface BaseOptions {
           outer: number
         }
   }
+  onError?: (err: Error) => void
 }

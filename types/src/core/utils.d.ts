@@ -1,7 +1,16 @@
-export declare function getErrorCorrectionLevel(content: string): string;
+import { BaseOptions, ErrorCorrectionLevel } from './types';
+export declare function getErrorCorrectionLevel(content: string): ErrorCorrectionLevel;
+/**
+ * load image, resolve image
+ * 加載圖片
+ * @param logoSrc
+ * @param crossOrigin
+ * @returns
+ */
 export declare function loadImage(logoSrc: string, crossOrigin: string): Promise<HTMLImageElement>;
 /**
  * draw radius
+ * 繪製帶圓角的綫條
  * @param ctx
  * @returns
  */
@@ -14,14 +23,15 @@ export declare const canvasRoundRect: (ctx: CanvasRenderingContext2D) => (x: num
 export declare function isFunction(o: any): boolean;
 /**
  * canvas get base64 url and set image src value, if need download image, auto download image
+ * 獲取 canvas base64 並賦值給 image 的 src 屬性
  * @param options
  * @returns
  */
-export declare const toImage: (options: any) => Promise<any>;
+export declare const toImage: (options: BaseOptions) => Promise<any>;
 /**
- * save image
- * @param image
- * @param name
+ * save image 保存圖片
+ * @param image HTMLImageElement
+ * @param name image name
  * @returns
  */
 export declare const saveImage: (image: HTMLImageElement, name: string) => Promise<boolean>;

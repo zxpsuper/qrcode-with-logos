@@ -1,3 +1,5 @@
+import { CornerType, DotType } from "./types";
+
 export default {
   logo: {
     logoSize: 0.15,
@@ -19,11 +21,11 @@ export default {
     }
   },
   dotsOptions: {
-    type: 'square',
+    type: 'square' as DotType,
     color: '#000'
   },
   cornersOptions: {
-    type: 'square',
+    type: 'square' as CornerType,
     color: '#000'
   }
-} as const
+}

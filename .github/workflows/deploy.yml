@@ -3,7 +3,7 @@ name: Build and Deploy to GitHub Pages
 on:
   push:
     branches:
-      - feature  # 指定触发部署的分支，通常是main或master
+      - master  # 指定触发部署的分支，通常是main或master
  
 jobs:
   build-and-deploy:

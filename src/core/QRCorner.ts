@@ -1,4 +1,8 @@
-import { CornerType } from './types'
+import {
+  BasicCornerDrawArgs,
+  CornerType,
+  RotationCornerDrawArgs
+} from './types'
 
 interface CornerTypes {
   [key: string]: CornerType
@@ -21,7 +25,7 @@ export default class QRCorner {
     public color: string
   ) {}
 
-  draw({ radius, x, y, cellSize }) {
+  draw({ radius, x, y, dotSize }: BasicCornerDrawArgs) {
     let drawFunction
     switch (this.cornerType) {
       case cornerTypes.circle:
@@ -48,77 +52,94 @@ export default class QRCorner {
         break
     }
 
-    drawFunction.call(this, { x, y, radius, cellSize })
+    drawFunction.call(this, { x, y, radius, dotSize })
   }
 
-  _drawRoundedCircle({ x, y, cellSize, radius }) {
-    radius = radius?.outer || radius || cellSize / 2
-    this.drawRoundedSquare(cellSize, x, y, cellSize * 7, radius, false, 0)
+  _drawRoundedCircle({ x, y, dotSize, radius }: BasicCornerDrawArgs) {
+    const _radius: number =
+      typeof radius === 'number' ? radius : radius?.outer || dotSize / 2
+    this.drawRoundedSquare(dotSize, x, y, dotSize * 7, _radius, false, 0)
     this.drawCircle(
-      cellSize,
-      x + 2 * cellSize,
-      y + 2 * cellSize,
-      cellSize * 3,
+      dotSize,
+      x + 2 * dotSize,
+      y + 2 * dotSize,
+      dotSize * 3,
       true
     )
   }
 
-  _drawCircleRounded({ x, y, cellSize, radius }) {
-    this.drawCircle(cellSize, x, y, cellSize * 7, false)
-    radius = radius?.inner || radius || cellSize / 4
+  _drawCircleRounded({ x, y, dotSize, radius }: BasicCornerDrawArgs) {
+    this.drawCircle(dotSize, x, y, dotSize * 7, false)
+    const _radius: number =
+      typeof radius === 'number' ? radius : radius?.inner || dotSize / 4
     this.drawRoundedSquare(
-      cellSize,
-      x + 2 * cellSize,
-      y + 2 * cellSize,
-      cellSize * 3,
-      radius,
+      dotSize,
+      x + 2 * dotSize,
+      y + 2 * dotSize,
+      dotSize * 3,
+      _radius,
       true,
       0
     )
   }
 
-  _drawCircleDiamond({ x, y, cellSize }) {
-    this.drawCircle(cellSize, x, y, cellSize * 7, false)
+  _drawCircleDiamond({ x, y, dotSize }: BasicCornerDrawArgs) {
+    this.drawCircle(dotSize, x, y, dotSize * 7, false)
     this.drawRoundedSquare(
-      cellSize,
-      x + 2 * cellSize,
-      y + 2 * cellSize,
-      cellSize * 3,
+      dotSize,
+      x + 2 * dotSize,
+      y + 2 * dotSize,
+      dotSize * 3,
       0,
       true,
       (45 * Math.PI) / 180
     )
   }
 
-  _drawCircleStar({ x, y, cellSize }) {
-    this.drawCircle(cellSize, x, y, cellSize * 7, false)
-    this.drawInnerStar(x + 2 * cellSize, y + 2 * cellSize, cellSize * 3)
+  _drawCircleStar({ x, y, dotSize }: BasicCornerDrawArgs) {
+    this.drawCircle(dotSize, x, y, dotSize * 7, false)
+    this.drawInnerStar(x + 2 * dotSize, y + 2 * dotSize, dotSize * 3)
   }
 
-  _drawSquare({ x, y, cellSize }) {
-    return this._drawBasicRounded(x, y, cellSize, 0)
+  _drawSquare({ x, y, dotSize }: BasicCornerDrawArgs) {
+    return this._drawBasicRounded({ x, y, dotSize, radius: 0 })
   }
 
-  _drawRounded({ x, y, cellSize, radius }) {
-    return this._drawBasicRounded(x, y, cellSize, {
-      inner: radius?.inner || cellSize / 4,
-      outer: radius?.outer || cellSize / 2
+  _drawRounded({ x, y, dotSize, radius }: BasicCornerDrawArgs) {
+    const inner =
+      typeof radius === 'number' ? radius : radius?.inner || dotSize / 4
+    const outer =
+      typeof radius === 'number' ? radius : radius?.outer || dotSize / 2
+    return this._drawBasicRounded({
+      x,
+      y,
+      dotSize,
+      radius: {
+        inner,
+        outer
+      }
     })
   }
 
-  _drawCircle({ x, y, cellSize }) {
-    this.drawCircle(cellSize, x, y, cellSize * 7, false)
+  _drawCircle({ x, y, dotSize }: BasicCornerDrawArgs) {
+    this.drawCircle(dotSize, x, y, dotSize * 7, false)
     this.drawCircle(
-      cellSize,
-      x + 2 * cellSize,
-      y + 2 * cellSize,
-      cellSize * 3,
+      dotSize,
+      x + 2 * dotSize,
+      y + 2 * dotSize,
+      dotSize * 3,
       true
     )
   }
 
-  _drawBasicRounded(x, y, cellSize, radius, rotation = 0) {
-    const lineWidth = Math.ceil(cellSize)
+  _drawBasicRounded({
+    x,
+    y,
+    dotSize,
+    radius,
+    rotation = 0
+  }: RotationCornerDrawArgs) {
+    const lineWidth = Math.ceil(dotSize)
     let radiusOuter
     let radiusInner
     if (typeof radius !== 'number') {
@@ -129,13 +150,13 @@ export default class QRCorner {
       radiusInner = radiusOuter
     }
 
-    let size = cellSize * 7
+    let size = dotSize * 7
     // Outer box
     this.drawRoundedSquare(lineWidth, x, y, size, radiusOuter, false, rotation)
     // Inner box
-    size = cellSize * 3
-    y += cellSize * 2
-    x += cellSize * 2
+    size = dotSize * 3
+    y += dotSize * 2
+    x += dotSize * 2
     this.drawRoundedSquare(lineWidth, x, y, size, radiusInner, true, rotation)
   }
 

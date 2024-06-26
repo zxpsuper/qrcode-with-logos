@@ -3,13 +3,14 @@ import defaultOptions from './core/defaultOptions'
 import { toImage, saveImage, isFunction } from './core/utils'
 import { BaseOptions } from './core/types'
 import { version } from '../package.json'
+
 class QrCodeWithLogo {
   static version: string = version
   options: BaseOptions
   ifCanvasDrawed: boolean = false
   ifImageCreated: boolean = false
-  drawImagePromiseResolve: Function[] = []
-  drawCanvasPromiseResolve: Function[] = []
+  private drawImagePromiseResolve: Function[] = []
+  private drawCanvasPromiseResolve: Function[] = []
 
   private drawImagePromise() {
     if (this.ifImageCreated) return Promise.resolve()
@@ -35,13 +36,19 @@ class QrCodeWithLogo {
   }
 
   constructor(options: BaseOptions) {
-    this.options = Object.assign(this.defaultOption, options)
-    if (!this.options.canvas)
-      this.options.canvas = document.createElement('canvas')
-    if (!this.options.image) this.options.image = document.createElement('img')
-    this._toCanvas().then(() => {
-      return this._toImage()
-    })
+    try {
+      this.options = Object.assign(this.defaultOption, options)
+      if (!this.options.canvas)
+        this.options.canvas = document.createElement('canvas')
+      if (!this.options.image) this.options.image = document.createElement('img')
+      this._toCanvas().then(() => {
+        return this._toImage()
+      })
+    } catch (err) {
+      if (options?.onError && isFunction(options.onError)) {
+        options.onError(err)
+      } 
+    }
   }
 
   /**
@@ -63,7 +70,6 @@ class QrCodeWithLogo {
    * @returns
    */
   private _toCanvas(): Promise<void> {
-    this.drawCanvasPromise()
     const qrCanvas = new QRCanvas(this.options)
     return qrCanvas.init().then(() => {
       this.ifCanvasDrawed = true
@@ -79,7 +85,6 @@ class QrCodeWithLogo {
    * @returns
    */
   private async _toImage(): Promise<void> {
-    this.drawImagePromise()
     return toImage(this.options).then(() => {
       this.ifImageCreated = true
       this.drawImagePromiseResolve.forEach((fn) => {
@@ -88,7 +93,7 @@ class QrCodeWithLogo {
       this.drawImagePromiseResolve.length = 0
     })
   }
-  
+
   public async downloadImage(name: string = defaultOptions.downloadName) {
     await this.drawImagePromise()
     return saveImage(this.options.image!, name)
