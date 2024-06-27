@@ -145,7 +145,11 @@
               download: false,
               image: document.getElementById('image'),
               logo: {
-                src: 'https://avatars.githubusercontent.com/u/28730619?v=4'
+                src: 'https://avatars.githubusercontent.com/u/28730619?v=4',
+                borderWidth: 60,
+                bgColor: '#eee',
+                borderRadius: 60,
+                logoRadius: 20
               },
               dotsOptions: {
                 color: this.dotColor,
@@ -153,9 +157,22 @@
               },
               cornersOptions: {
                 color: this.cornerColor,
-                type: this.cornerType
+                type: this.cornerType,
+                radius: {
+                  inner: 1,
+                  outer: 320
+                }
               },
-              nodeQrCodeOptions: {}
+              nodeQrCodeOptions: {
+                margin: 4,
+                color: {
+                  dark: '#f00',
+                  light: '#eee'
+                }
+              },
+              onError(error) {
+                console.log(error)
+              }
             })
           }
         }

@@ -2,8 +2,6 @@ import { CornerType, DotType } from "./types";
 
 export default {
   logo: {
-    logoSize: 0.15,
-    borderSize: 0.05,
     bgColor: '#fff',
     borderWidth: 10,
     crossOrigin: 'anonymous',

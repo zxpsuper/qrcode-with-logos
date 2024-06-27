@@ -77,10 +77,8 @@ export type CornerType =
 export interface Logo {
   src: string
   logoRadius?: number
-  logoSize?: number
   borderRadius?: number
   borderColor?: string
-  borderSize?: number
   bgColor?: string
   crossOrigin?: string
   borderWidth?: number

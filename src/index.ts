@@ -41,13 +41,19 @@ class QrCodeWithLogo {
       if (!this.options.canvas)
         this.options.canvas = document.createElement('canvas')
       if (!this.options.image) this.options.image = document.createElement('img')
-      this._toCanvas().then(() => {
-        return this._toImage()
-      })
-    } catch (err) {
+      this._toCanvas()
+        .then(() => {
+          return this._toImage()
+        })
+        .catch((error) => {
+          if (options?.onError && isFunction(options.onError)) {
+            options.onError(error)
+          }
+        })
+    } catch (error) {
       if (options?.onError && isFunction(options.onError)) {
-        options.onError(err)
-      } 
+        options.onError(error)
+      }
     }
   }
 

@@ -4,4 +4,5 @@
 
 - **style:** Set different color and type of dots and corners.
 - **logo:** More normal aspect ratio of logo but no always 1:1.
+- **logo:** Intelligent logo size.
 - **canvas:** Faster drawing speed then before.
