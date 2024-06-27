@@ -5,10 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>QRcode-with-logo</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://unpkg.com/view-design/dist/styles/iview.css"
+    />
+    <link rel="stylesheet" href="./index.css" />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/view-design/dist/iview.min.js"
+    ></script>
   </head>
   <body>
-    <canvas id="canvas"></canvas>
-    <img src="" alt="" id="image" />
+    <a
+      class="github-fork-ribbon right-top"
+      href="https://github.com/zxpsuper/qrcode-with-logos"
+      title="Fork me on GitHub"
+      >Fork me on GitHub</a
+    >
+    <div class="info">
+      <h2>qrcode-with-logos</h2>
+      <p>
+        You can input
+        <span class="code">qrcode.downloadImage('qrcode')</span> to download
+        image on console.
+        <button onclick="qrcode.downloadImage('qrcode')">download!</button>
+      </p>
+      <p>
+        You can input
+        <span class="code">qrcode.getCanvas().then(canvas => {})</span> to deal
+        with the canvas.
+      </p>
+      <p>
+        You can input
+        <span class="code">qrcode.getImage().then(image => {})</span> to deal
+        with the image.
+      </p>
+      <div style="margin-top: 16px">
+        <canvas id="canvas" title="canvas"></canvas>
+        <img src="" alt="" id="image" title="image" />
+      </div>
+    </div>
+    <div id="app">
+      <row>
+        <i-col span="12">
+          <span>
+            dotsOptions.type
+            <i-select
+              v-model="dotType"
+              style="width: 200px; text-align: left"
+              placeholder="choose"
+              @on-change="createQrcode"
+            >
+              <i-option v-for="item in dotTypes" :value="item" :key="item"
+                >{{ item }}</i-option
+              >
+            </i-select>
+          </span>
+        </i-col>
+        <i-col span="12">
+          <span>
+            cornersOptions.type
+            <i-select
+              v-model="cornerType"
+              style="width: 200px; text-align: left"
+              placeholder="choose"
+              @on-change="createQrcode"
+            >
+              <i-option v-for="item in cornerTypes" :value="item" :key="item"
+                >{{ item }}</i-option
+              >
+            </i-select>
+          </span>
+        </i-col>
+      </row>
+
+      <row>
+        <i-col span="12">
+          dotsOptions.color<color-picker
+            v-model="dotColor"
+            @on-change="createQrcode"
+          ></color-picker>
+        </i-col>
+        <i-col span="12"
+          >cornersOptions.color<color-picker
+            v-model="cornerColor"
+            @on-change="createQrcode"
+          ></color-picker
+        ></i-col>
+      </row>
+      <div></div>
+    </div>
+    <!-- <img src="" alt="" id="image" /> -->
     <script src="./src/server.ts"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          dotType: 'stripe',
+          dotColor: '#000',
+          dotTypes: [
+            'square',
+            'dot',
+            'dot-small',
+            'tile',
+            'rounded',
+            'diamond',
+            'star',
+            'fluid',
+            'fluid-line',
+            'stripe',
+            'stripe-column'
+          ],
+          cornerType: 'square',
+          cornerColor: '#000',
+          cornerTypes: [
+            'square',
+            'rounded',
+            'circle',
+            'rounded-circle',
+            'circle-rounded',
+            'circle-diamond',
+            'circle-star'
+          ]
+        },
+        mounted() {
+          this.createQrcode()
+        },
+        methods: {
+          createQrcode() {
+            window.qrcode = new QrCodeWithLogo({
+              canvas: document.getElementById('canvas'),
+              content: 'https://github.com/zxpsuper',
+              width: 1024,
+              download: false,
+              image: document.getElementById('image'),
+              logo: {
+                src: 'https://avatars.githubusercontent.com/u/28730619?v=4',
+                borderWidth: 60,
+                bgColor: '#eee',
+                borderRadius: 60,
+                logoRadius: 20
+              },
+              dotsOptions: {
+                color: this.dotColor,
+                type: this.dotType
+              },
+              cornersOptions: {
+                color: this.cornerColor,
+                type: this.cornerType,
+                radius: {
+                  inner: 1,
+                  outer: 320
+                }
+              },
+              nodeQrCodeOptions: {
+                margin: 4,
+                color: {
+                  dark: '#f00',
+                  light: '#eee'
+                }
+              },
+              onError(error) {
+                console.log(error)
+              }
+            })
+          }
+        }
+      })
+    </script>
   </body>
 </html>

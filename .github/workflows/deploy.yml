@@ -1,0 +1,33 @@
+name: Build and Deploy to GitHub Pages
+ 
+on:
+  push:
+    branches:
+      - master  # 指定触发部署的分支，通常是main或master
+ 
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # 使用最新的Ubuntu虚拟环境
+ 
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+ 
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '19'  # 指定Node.js的版本，根据您的项目需求调整
+ 
+    - name: Install Dependencies
+      run: npm install # 安装依赖
+ 
+    - name: Build
+      run: npm run docs:build # 构建文档
+ 
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.4 # 使用他人的 action 将文档推送至 gh-pages 分支
+      with:
+        GITHUB_TOKEN: ${{ secrets.BLOB_DEPLOY_PRI }}
+        BRANCH: gh-pages  # 部署到gh-pages分支
+        FOLDER: docs/.vitepress/dist  # 指定构建目录，根据您的构建工具可能不同，如'build'或'dist'
+        CLEAN: true  # 清理旧文件

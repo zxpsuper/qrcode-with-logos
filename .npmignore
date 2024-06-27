@@ -1,11 +1,16 @@
+.cache/
+.github/
 dist/
+docs/
+images/
 src/
 .gitignore
 .npmignore
 .npmrc
+index.css
 index.html
-demo.png
 index.ts
+package-lock.json
 rollup.config.js
 tsconfig.json
 webpack.config.js
