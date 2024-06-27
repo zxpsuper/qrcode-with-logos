@@ -47,10 +47,8 @@ export type CornerType = 'square' | 'rounded' | 'circle' | 'rounded-circle' | 'c
 export interface Logo {
     src: string;
     logoRadius?: number;
-    logoSize?: number;
     borderRadius?: number;
     borderColor?: string;
-    borderSize?: number;
     bgColor?: string;
     crossOrigin?: string;
     borderWidth?: number;

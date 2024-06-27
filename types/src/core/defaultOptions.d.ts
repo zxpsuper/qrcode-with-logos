@@ -1,8 +1,6 @@
 import { CornerType, DotType } from "./types";
 declare const _default: {
     logo: {
-        logoSize: number;
-        borderSize: number;
         bgColor: string;
         borderWidth: number;
         crossOrigin: string;
