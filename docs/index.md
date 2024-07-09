@@ -5,7 +5,7 @@ layout: home
 hero:
   name: qrcode-with-logos
   # text: QRcode-with-logos is a tool for creating a QRcode with a logo.
-  tagline: A library for generating QR codes with a logo and styling. 
+  tagline: A library for generating QR codes with a logo and styling.
   # image:
   #   src: /logo.png
   #   alt: qrcode-with-logos
@@ -18,8 +18,7 @@ hero:
       link: https://github.com/zxpsuper/qrcode-with-logos
 ---
 
-![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos)  ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat-square)
-
+![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos) ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat-square)
 
 Qrcode-with-logos is a library for generating QR codes with a logo and styling in your object.
 
@@ -35,7 +34,7 @@ You can set the colors of dots and corners respectively.
 You also can set the different type of dots and corners respectively!
 
 <el-row :gutter="20">
-  <el-col :span="12"><img id="canvas1" style="width: 280px"/></el-col>
+  <el-col :span="12"><img id="image" style="width: 280px"/></el-col>
   <el-col :span="12" v-if="isClient">
     dots.color: <el-color-picker v-model="dotColor" @change="createQrcode1"></el-color-picker>
     <div style="margin-top: 16px">
@@ -80,8 +79,6 @@ You also can set the different type of dots and corners respectively!
   </el-col>
 </el-row>
 
-
-
 ## Dependencies
 
 | Project  | Status                             | Description                   |
@@ -97,10 +94,8 @@ You also can set the different type of dots and corners respectively!
 If you have some question or advise, you can send me a E-mail(zxpscau@163.com) or open an [issue](https://github.com/zxpsuper/qrcode-with-logos/issues/new).
 
 <script>
-  // import Qrcode from '../src/index'
-  import Qrcode from '../lib/qrcode-with-logos.esm'
-  // import Qrcode from '../lib/qrcode-with-logos.common'
-  // import Qrcode from '../lib/qrcode-with-logos.min'
+  // import QrCodeWithLogo from '../src/index'
+  import QrCodeWithLogo from '../lib/qrcode-with-logos.esm'
 
   function getBlobURL(blob) {
     if (!blob) return ''
@@ -160,11 +155,10 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
     methods: {
       createQrcode1(download = false) {
         try {
-          const qr = new Qrcode({
-            image: document.getElementById('canvas1'),
-            content: 'https://github.com/zxpsuper',
+          let qrcode = new QrCodeWithLogo({
+            content: "https://github.com/zxpsuper",
             width: 1024,
-            download,
+            image: document.getElementById("image"),
             logo: {
               src: this.logo
             },
@@ -179,8 +173,9 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
             nodeQrCodeOptions: {
               margin: 20
             }
-          })
-          qr.getImage().then(image => {
+          });
+
+          qrcode.getImage().then(image => {
             console.log('open image is:' , image)
           })
         } catch (err) {

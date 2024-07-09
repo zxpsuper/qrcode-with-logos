@@ -32,7 +32,10 @@ class QrCodeWithLogo {
     content: '',
     width: defaultOptions.width,
     download: defaultOptions.download,
-    downloadName: defaultOptions.downloadName
+    downloadName: defaultOptions.downloadName,
+    nodeQrCodeOptions: {},
+    cornersOptions: {},
+    dotsOptions: {}
   }
 
   constructor(options: BaseOptions) {

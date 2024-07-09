@@ -33,7 +33,10 @@ new QrCodeWithLogo({
   width: 380,
   logo: {
     src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
-  }
+  },
+  nodeQrCodeOptions: {},
+  cornersOptions: {},
+  dotsOptions: {}
 })
 ```
 If you do not need to show the qrcode on the page, try not input the canvas options. And It will create a Canvas element inside to finish it's work!
