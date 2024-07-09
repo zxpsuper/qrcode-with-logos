@@ -26,21 +26,23 @@ Visit [https://zxpsuper.github.io/qrcode-with-logos](https://zxpsuper.github.io/
 ## Example
 
 ```html
-<canvas id="canvas"></canvas> <img src="" alt="" id="image" />
 <img id="image" alt="">
 ```
 
 ```js
 import QrCodeWithLogo from "qrcode-with-logos";
 let qrcode = new QrCodeWithLogo({
-  canvas: document.getElementById("canvas"),
+  // canvas: document.getElementById("canvas"),
   content: "https://github.com/zxpsuper",
   width: 380,
   //   download: true,
   image: document.getElementById("image"),
   logo: {
     src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
-  }
+  },
+  nodeQrCodeOptions: {},
+  cornersOptions: {},
+  dotsOptions: {}
 });
 
 qrcode.downloadImage("qrcode.png");
