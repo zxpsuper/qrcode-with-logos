@@ -180,6 +180,9 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
               margin: 20
             }
           })
+          qr.getImage().then(image => {
+            console.log('open image is:' , image)
+          })
         } catch (err) {
           console.log(err)
         }
