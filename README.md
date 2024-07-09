@@ -1,6 +1,8 @@
 # qrcode-with-logos 
 
-![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos)  ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat-square) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat-square)
+![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos?style=flat&logo=github)  ![](https://img.shields.io/github/forks/zxpsuper/qrcode-with-logos?style=flat&logo=github) ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat&logo=npm) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat)  ![](https://img.shields.io/npm/dm/qrcode-with-logos
+) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat)
+
 
 <img src="./images/qr-code.png" width="200"><img src="./images/qr-code2.png" width="200"><img src="./images/qr-code3.png" width="200">
 
