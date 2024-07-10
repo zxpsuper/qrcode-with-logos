@@ -22,6 +22,9 @@ QR Code width.
 
 A canvas tag to show the QR code.
 
+> [!TIP]
+> It is better to use image but not canvas if you don't need drawing after creating qrcode.
+
 ## image
 
 - Type: `HTMLImageElement`
@@ -42,17 +45,20 @@ if download is a funciton, you can use it like:
 
 ```js
 new QrCodeWithLogo({
-  content: 'https://github.com/zxpsuper',
+  content: "https://github.com/zxpsuper",
   logo: {
-    src: 'https://avatars1.githubusercontent.com/u/28730619?s=460&v=4'
+    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4",
   },
+  nodeQrCodeOptions: {},
+  cornersOptions: {},
+  dotsOptions: {},
   download(downloadFn) {
     // you can choose when to start download by downloadFn...
     downloadFn().then(() => {
       // do what you want to do after download image!
-    })
-  }
-})
+    });
+  },
+});
 ```
 
 ## downloadName
@@ -100,14 +106,14 @@ qrcode color
 - Type: `string`
 - Default: `#000000`
 
-qrcode color value of dark
+qrcode color value of dark (qrcode foreground color)
 
 #### nodeQrCodeOptions.color.light
 
 - Type: `string`
 - Default: `#ffffff`
 
-qrcode color value of light
+qrcode color value of light (qrcode background color)
 
 > [!TIP]
 > If you want a transparent background, please set light equal to '#00000000'
@@ -137,7 +143,6 @@ It can auto calculate logoSize now!
 
 > [!WARNING]
 > You are recommended to use **borderWidth** instead of borderSize!
-
 
 ### logo.borderWidth
 
