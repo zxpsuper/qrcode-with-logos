@@ -11,14 +11,8 @@
       href="https://unpkg.com/view-design/dist/styles/iview.css"
     />
     <link rel="stylesheet" href="./index.css" />
-    <script
-      type="text/javascript"
-      src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="https://unpkg.com/view-design/dist/iview.min.js"
-    ></script>
+    <script type="text/javascript" src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/view-design/dist/iview.min.js"></script>
   </head>
   <body>
     <a
@@ -31,19 +25,16 @@
       <h2>qrcode-with-logos</h2>
       <p>
         You can input
-        <span class="code">qrcode.downloadImage('qrcode')</span> to download
-        image on console.
+        <span class="code">qrcode.downloadImage('qrcode')</span> to download image on console.
         <button onclick="qrcode.downloadImage('qrcode')">download!</button>
       </p>
       <p>
         You can input
-        <span class="code">qrcode.getCanvas().then(canvas => {})</span> to deal
-        with the canvas.
+        <span class="code">qrcode.getCanvas().then(canvas => {})</span> to deal with the canvas.
       </p>
       <p>
         You can input
-        <span class="code">qrcode.getImage().then(image => {})</span> to deal
-        with the image.
+        <span class="code">qrcode.getImage().then(image => {})</span> to deal with the image.
       </p>
       <div style="margin-top: 16px">
         <canvas id="canvas" title="canvas"></canvas>
@@ -61,9 +52,7 @@
               placeholder="choose"
               @on-change="createQrcode"
             >
-              <i-option v-for="item in dotTypes" :value="item" :key="item"
-                >{{ item }}</i-option
-              >
+              <i-option v-for="item in dotTypes" :value="item" :key="item">{{ item }}</i-option>
             </i-select>
           </span>
         </i-col>
@@ -76,9 +65,7 @@
               placeholder="choose"
               @on-change="createQrcode"
             >
-              <i-option v-for="item in cornerTypes" :value="item" :key="item"
-                >{{ item }}</i-option
-              >
+              <i-option v-for="item in cornerTypes" :value="item" :key="item">{{ item }}</i-option>
             </i-select>
           </span>
         </i-col>
@@ -106,7 +93,7 @@
       new Vue({
         el: '#app',
         data: {
-          dotType: 'stripe',
+          dotType: 'stripe-row',
           dotColor: '#000',
           dotTypes: [
             'square',
@@ -119,6 +106,7 @@
             'fluid',
             'fluid-line',
             'stripe',
+            'stripe-row',
             'stripe-column'
           ],
           cornerType: 'square',
@@ -146,7 +134,7 @@
               image: document.getElementById('image'),
               logo: {
                 src: 'https://avatars.githubusercontent.com/u/28730619?v=4',
-                borderWidth: 60,
+                // borderWidth: 60,
                 bgColor: '#eee',
                 borderRadius: 60,
                 logoRadius: 20
@@ -164,7 +152,7 @@
                 }
               },
               nodeQrCodeOptions: {
-                margin: 4,
+                margin: 10,
                 color: {
                   dark: '#f00',
                   light: '#eee'

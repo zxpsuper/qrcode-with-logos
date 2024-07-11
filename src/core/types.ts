@@ -1,8 +1,11 @@
+import { QRCanvas } from "./QRCanvas"
+
 export type DrawArgs = {
   x: number
   y: number
   size: number
   getNeighbor?: GetNeighbor
+  qrCanvas?: QRCanvas
 }
 
 export type RotateFigureArgs = {
@@ -63,6 +66,7 @@ export type DotType =
   | 'fluid'
   | 'fluid-line'
   | 'stripe'
+  | 'stripe-row'
   | 'stripe-column'
 
 export type CornerType =

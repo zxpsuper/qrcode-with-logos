@@ -1,3 +1,4 @@
+import { QRCanvas } from './QRCanvas'
 import {
   BasicFigureDrawArgsCanvas,
   DrawDotArgsCanvas,
@@ -23,6 +24,7 @@ const dotTypes = {
   fluid: 'fluid',
   fluidLine: 'fluid-line',
   stripe: 'stripe',
+  stripeRow: 'stripe-row',
   stripeColumn: 'stripe-column'
 } as DotTypes
 
@@ -41,7 +43,7 @@ export default class QRDot {
     this.dotSize = options.dotSize
   }
 
-  draw(x: number, y: number, getNeighbor: GetNeighbor): void {
+  draw(x: number, y: number, getNeighbor: GetNeighbor, qrCanvas: QRCanvas): void {
     const context = this._context
     const type = this._type
     let drawFunction
@@ -73,6 +75,9 @@ export default class QRDot {
       case dotTypes.stripe:
         drawFunction = this._drawStripe
         break
+      case dotTypes.stripeRow:
+        drawFunction = this._drawStripeRow
+        break
       case dotTypes.stripeColumn:
         drawFunction = this._drawStripeColumn
         break
@@ -82,7 +87,14 @@ export default class QRDot {
         break
     }
 
-    drawFunction.call(this, { x, y, size: this.dotSize, context, getNeighbor })
+    drawFunction.call(this, {
+      x,
+      y,
+      size: this.dotSize,
+      context,
+      getNeighbor,
+      qrCanvas
+    })
   }
 
   _drawSquare({ x, y, size, context }: DrawArgsCanvas) {
@@ -124,7 +136,7 @@ export default class QRDot {
     const cy = y + size / 2
     const originX = -size / 2
     context.translate(cx, cy)
-    canvasRoundRect(context)(originX, originX, size,size, size / 4)
+    canvasRoundRect(context)(originX, originX, size, size, size / 4)
     context.fill()
     context.translate(-cx, -cy)
   }
@@ -168,10 +180,7 @@ export default class QRDot {
   _drawFluidLine(args: DrawArgsCanvas) {
     this._drawFluid(args, true)
   }
-  _drawFluid(
-    { x, y, size, context, getNeighbor }: DrawArgsCanvas,
-    line = false
-  ) {
+  _drawFluid({ x, y, size, context, getNeighbor }: DrawArgsCanvas, line = false) {
     let roundedCorners = [false, false, false, false] // top-left, top-right, bottom-right, bottom-left
     if (!getNeighbor(0, -1) && !getNeighbor(-1, 0)) roundedCorners[0] = true
     if (!getNeighbor(1, 0) && !getNeighbor(0, -1)) roundedCorners[1] = true
@@ -184,41 +193,38 @@ export default class QRDot {
     context.arc(0, 0, size / 2, 0, 2 * Math.PI, false)
     context.closePath()
     context.fill()
-    if (!roundedCorners[0])
-      context.fillRect(-size / 2, -size / 2, size / 2, size / 2)
+    if (!roundedCorners[0]) context.fillRect(-size / 2, -size / 2, size / 2, size / 2)
     if (!roundedCorners[1]) context.fillRect(0, -size / 2, size / 2, size / 2)
     if (!roundedCorners[2]) context.fillRect(0, 0, size / 2, size / 2)
     if (!roundedCorners[3]) context.fillRect(-size / 2, 0, size / 2, size / 2)
 
-    if (line) {
-      const originLinWidth = context.lineWidth
+    if (line && !getNeighbor(0, 1)) {
       if (getNeighbor(-1, 1)) {
         context.beginPath()
-        context.lineWidth = size / 4
-        context.moveTo(0, 0)
-        context.lineTo(-size, size)
-        context.stroke()
+        context.arc(-size, 0, size / 2, 0, 0.5 * Math.PI, false)
+        context.arc(0, size, size / 2, Math.PI, 1.5 * Math.PI, false)
         context.closePath()
+        context.stroke()
+        context.fill()
       }
       if (getNeighbor(1, 1)) {
         context.beginPath()
-        context.lineWidth = size / 4
-        context.moveTo(0, 0)
-        context.lineTo(size, size)
-        context.stroke()
+        context.arc(size, 0, size / 2, 0.5 * Math.PI, Math.PI, false)
+        context.arc(0, size, size / 2, 1.5 * Math.PI, 0, false)
         context.closePath()
+        context.stroke()
+        context.fill()
       }
-      context.lineWidth = originLinWidth
     }
     context.translate(-cx, -cy)
   }
 
   _drawStripeColumn(args: DrawArgsCanvas) {
-    this._drawStripe(args, 'column')
+    this._drawStripeRow(args, 'column')
   }
 
-  _drawStripe(
-    { x, y, size, context, getNeighbor }: DrawArgsCanvas,
+  _drawStripeRow(
+    { x, y, size, context, getNeighbor, qrCanvas }: DrawArgsCanvas,
     type: 'row' | 'column' = 'row'
   ) {
     const cx = x + size / 2
@@ -246,14 +252,9 @@ export default class QRDot {
     context.translate(-cx, -cy)
   }
 
-  _rotateFigure({
-    x,
-    y,
-    size,
-    context,
-    rotation = 0,
-    draw
-  }: RotateFigureArgsCanvas) {
+  _drawStripe(args: DrawArgsCanvas) {}
+
+  _rotateFigure({ x, y, size, context, rotation = 0, draw }: RotateFigureArgsCanvas) {
     const cx = x + size / 2
     const cy = y + size / 2
     context.translate(cx, cy)
