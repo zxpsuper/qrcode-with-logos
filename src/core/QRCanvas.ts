@@ -330,7 +330,8 @@ export class QRCanvas {
               if (!filterDots(i + xOffset, j + yOffset)) return null
               return this.isDark(i + xOffset, j + yOffset)
             },
-            this
+            this,
+            i, j
           )
         }
       }

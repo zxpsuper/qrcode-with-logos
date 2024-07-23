@@ -43,7 +43,14 @@ export default class QRDot {
     this.dotSize = options.dotSize
   }
 
-  draw(x: number, y: number, getNeighbor: GetNeighbor, qrCanvas: QRCanvas): void {
+  draw(
+    x: number,
+    y: number,
+    getNeighbor: GetNeighbor,
+    qrCanvas: QRCanvas,
+    i: number,
+    j: number
+  ): void {
     const context = this._context
     const type = this._type
     let drawFunction
@@ -93,7 +100,9 @@ export default class QRDot {
       size: this.dotSize,
       context,
       getNeighbor,
-      qrCanvas
+      qrCanvas,
+      i,
+      j
     })
   }
 
@@ -220,39 +229,92 @@ export default class QRDot {
   }
 
   _drawStripeColumn(args: DrawArgsCanvas) {
-    this._drawStripeRow(args, 'column')
+    return this._drawStripe(args, 'column')
   }
 
-  _drawStripeRow(
-    { x, y, size, context, getNeighbor, qrCanvas }: DrawArgsCanvas,
-    type: 'row' | 'column' = 'row'
+  _drawStripeRow(args: DrawArgsCanvas) {
+    return this._drawStripe(args, 'row')
+  }
+
+  _drawStripe(
+    { x, y, size, context, qrCanvas, i, j }: DrawArgsCanvas,
+    type: 'row' | 'column' | 'default' = 'default'
   ) {
-    const cx = x + size / 2
-    const cy = y + size / 2
-    context.translate(cx, cy)
-    context.beginPath()
-    context.arc(0, 0, size / 4, 0, 2 * Math.PI, false)
-    context.fill()
-    context.closePath()
-    if (type === 'row') {
-      if (getNeighbor(-1, 0)) {
-        context.fillRect(-size / 2, -size / 4, size / 2, size / 2)
-      }
-      if (getNeighbor(1, 0)) {
-        context.fillRect(0, -size / 4, size / 2, size / 2)
-      }
-    } else if (type === 'column') {
-      if (getNeighbor(0, -1)) {
-        context.fillRect(-size / 4, -size / 2, size / 2, size / 2)
-      }
-      if (getNeighbor(0, 1)) {
-        context.fillRect(-size / 4, 0, size / 2, size / 2)
+
+    function setRangeDisabled(width, height) {
+      for (let i1 = i; i1 < i + width; i1++) {
+        for (let j1 = j; j1 < j + height; j1++) {
+          qrCanvas.setDisabled(i1, j1)
+        }
       }
     }
-    context.translate(-cx, -cy)
-  }
 
-  _drawStripe(args: DrawArgsCanvas) {}
+    function getRangeTrue(width, height) {
+      let isTrue = true
+      for (let i1 = i; i1 < i + width; i1++) {
+        for (let j1 = j; j1 < j + height; j1++) {
+          if (!qrCanvas.isDark(i1, j1)) {
+            isTrue = false
+            break
+          }
+        }
+        if (!isTrue) {
+          break
+        }
+      }
+      return isTrue
+    }
+
+    function drawItem(width, height) {
+      const cx = x + size / 2
+      const cy = y + size / 2
+      context.translate(cx, cy)
+      context.beginPath()
+      if (width === 1 && height === 1) {
+        // 画圆点
+        context.arc(0, 0, size / 4, 0, 2 * Math.PI, false)
+      } else if (width > 1) {
+        // 画横
+        context.arc(0, 0, size / 4, 0.5 * Math.PI, 1.5 * Math.PI, false)
+        context.arc(size * (width - 1), 0, size / 4, 1.5 * Math.PI, 0.5 * Math.PI, false)
+      } else if (height > 1) {
+        // 画竖
+        context.arc(0, 0, size / 4, Math.PI, 2 * Math.PI, false)
+        context.arc(0, size * (height - 1), size / 4, 0, Math.PI, false)
+      }
+      context.fill()
+      context.closePath()
+      context.translate(-cx, -cy)
+      setRangeDisabled(width, height)
+    }
+
+    const array =
+      type === 'row'
+        ? [
+            [3, 1],
+            [2, 1],
+            [1, 1]
+          ]
+        : type === 'column'
+        ? [
+            [1, 3],
+            [1, 2],
+            [1, 1]
+          ]
+        : [
+            [3, 1],
+            [1, 3],
+            [2, 1],
+            [1, 2],
+            [1, 1]
+          ]
+
+    array.forEach((comb) => {
+      if (getRangeTrue(comb[0], comb[1])) {
+        drawItem(comb[0], comb[1])
+      }
+    })
+  }
 
   _rotateFigure({ x, y, size, context, rotation = 0, draw }: RotateFigureArgsCanvas) {
     const cx = x + size / 2
