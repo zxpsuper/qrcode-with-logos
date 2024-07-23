@@ -12,7 +12,10 @@ QR Code content.
 
 - Default: `380`
 
-QR Code width.
+QR Code canvas width.
+
+> [!TIP]
+> If you feel that QRCode not sharp and not clear enough, you can set the width to larger and it looks better!
 
 ## canvas
 
@@ -24,6 +27,8 @@ A canvas tag to show the QR code.
 
 > [!TIP]
 > It is better to use image but not canvas if you don't need drawing after creating qrcode.
+>
+> Canvas may appear white and flashing!
 
 ## image
 
@@ -45,20 +50,17 @@ if download is a funciton, you can use it like:
 
 ```js
 new QrCodeWithLogo({
-  content: "https://github.com/zxpsuper",
+  content: 'https://github.com/zxpsuper',
   logo: {
-    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4",
+    src: 'https://avatars1.githubusercontent.com/u/28730619?s=460&v=4'
   },
-  nodeQrCodeOptions: {},
-  cornersOptions: {},
-  dotsOptions: {},
   download(downloadFn) {
     // you can choose when to start download by downloadFn...
     downloadFn().then(() => {
       // do what you want to do after download image!
-    });
-  },
-});
+    })
+  }
+})
 ```
 
 ## downloadName
@@ -182,6 +184,7 @@ It is the logo background color
 | "fluid"
 | "fluid-line"
 | "stripe"
+| "stripe-row"
 | "stripe-column"`
 - Default: `square`
 

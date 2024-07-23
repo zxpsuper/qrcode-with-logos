@@ -1,8 +1,6 @@
-# qrcode-with-logos 
+# qrcode-with-logos
 
-![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos?style=flat&logo=github)  ![](https://img.shields.io/github/forks/zxpsuper/qrcode-with-logos?style=flat&logo=github) ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat&logo=npm) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat)  ![](https://img.shields.io/npm/dm/qrcode-with-logos
-) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat)
-
+![](https://img.shields.io/github/stars/zxpsuper/qrcode-with-logos?style=flat&logo=github) ![](https://img.shields.io/github/forks/zxpsuper/qrcode-with-logos?style=flat&logo=github) ![](https://img.shields.io/npm/v/qrcode-with-logos.svg?style=flat&logo=npm) ![](https://img.shields.io/npm/dt/qrcode-with-logos.svg?style=flat) ![](https://img.shields.io/npm/dm/qrcode-with-logos) ![](https://img.shields.io/npm/l/qrcode.svg?style=flat)
 
 <img src="./images/qr-code.png" width="200"><img src="./images/qr-code2.png" width="200"><img src="./images/qr-code3.png" width="200">
 
@@ -25,29 +23,27 @@ npm install qrcode-with-logos --save
 ## Documentation
 
 Visit [https://zxpsuper.github.io/qrcode-with-logos](https://zxpsuper.github.io/qrcode-with-logos/)!
+
 ## Example
 
 ```html
-<img id="image" alt="">
+<img id="image" alt="" />
 ```
 
 ```js
-import QrCodeWithLogo from "qrcode-with-logos";
+import QrCodeWithLogo from 'qrcode-with-logos'
 let qrcode = new QrCodeWithLogo({
   // canvas: document.getElementById("canvas"),
-  content: "https://github.com/zxpsuper",
+  content: 'https://github.com/zxpsuper',
   width: 380,
   //   download: true,
-  image: document.getElementById("image"),
+  image: document.getElementById('image'),
   logo: {
-    src: "https://avatars1.githubusercontent.com/u/28730619?s=460&v=4"
-  },
-  nodeQrCodeOptions: {},
-  cornersOptions: {},
-  dotsOptions: {}
-});
+    src: 'https://avatars1.githubusercontent.com/u/28730619?s=460&v=4'
+  }
+})
 
-qrcode.downloadImage("qrcode.png");
+qrcode.downloadImage('qrcode.png')
 ```
 
 ## Dependencies
