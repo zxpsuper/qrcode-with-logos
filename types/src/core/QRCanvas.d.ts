@@ -33,6 +33,8 @@ export declare class QRCanvas {
      * Coordinate is dark dot ? 0 or 1
      */
     isDark(x: number, y: number): boolean;
+    isDisabled(x: number, y: number): boolean;
+    setDisabled(x: number, y: number): number;
     /**
      * 畫背景
      */

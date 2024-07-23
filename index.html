@@ -93,7 +93,7 @@
       new Vue({
         el: '#app',
         data: {
-          dotType: 'stripe-row',
+          dotType: 'stripe',
           dotColor: '#000',
           dotTypes: [
             'square',
@@ -128,7 +128,7 @@
           createQrcode() {
             window.qrcode = new QrCodeWithLogo({
               canvas: document.getElementById('canvas'),
-              content: 'https://github.com/zxpsuper',
+              content: 'https://github.com/zxpsuper/qrcode-with-logos',
               width: 1024,
               download: false,
               image: document.getElementById('image'),
@@ -159,8 +159,15 @@
                 }
               },
               onError(error) {
-                console.log(error)
+                console.log(error, 100)
               }
+            })
+
+            window.qrcode.getImage().catch((err) => {
+              console.log(err, 111)
+            })
+            window.qrcode.getCanvas().catch((err) => {
+              console.log(err, 222)
             })
           }
         }

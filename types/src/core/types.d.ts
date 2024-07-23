@@ -1,8 +1,17 @@
+import { QRCanvas } from "./QRCanvas";
 export type DrawArgs = {
+    /**x坐标实际像素位置 */
     x: number;
+    /**y坐标实际像素位置 */
     y: number;
+    /**单元像素尺寸 */
     size: number;
     getNeighbor?: GetNeighbor;
+    qrCanvas?: QRCanvas;
+    /**x坐标 */
+    i?: number;
+    /**y坐标 */
+    j?: number;
 };
 export type RotateFigureArgs = {
     x: number;
@@ -29,7 +38,7 @@ export type BasicFigureDrawArgs = {
     size: number;
     rotation?: number;
 };
-export type GetNeighbor = (x: number, y: number) => boolean;
+export type GetNeighbor = (offsetX: number, offsetY: number) => boolean;
 export type DrawArgsCanvas = DrawArgs & {
     context: CanvasRenderingContext2D;
 };
@@ -42,7 +51,7 @@ export type BasicFigureDrawArgsCanvas = BasicFigureDrawArgs & {
 export type RotateFigureArgsCanvas = RotateFigureArgs & {
     context: CanvasRenderingContext2D;
 };
-export type DotType = 'dot' | 'dot-small' | 'tile' | 'rounded' | 'square' | 'diamond' | 'star' | 'fluid' | 'fluid-line' | 'stripe' | 'stripe-column';
+export type DotType = 'dot' | 'dot-small' | 'tile' | 'rounded' | 'square' | 'diamond' | 'star' | 'fluid' | 'fluid-line' | 'stripe' | 'stripe-row' | 'stripe-column';
 export type CornerType = 'square' | 'rounded' | 'circle' | 'rounded-circle' | 'circle-rounded' | 'circle-star' | 'circle-diamond';
 export interface Logo {
     src: string;

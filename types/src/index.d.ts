@@ -5,7 +5,9 @@ declare class QrCodeWithLogo {
     ifCanvasDrawed: boolean;
     ifImageCreated: boolean;
     private drawImagePromiseResolve;
+    private drawImagePromiseReject;
     private drawCanvasPromiseResolve;
+    private drawCanvasPromiseReject;
     private drawImagePromise;
     private drawCanvasPromise;
     private defaultOption;
@@ -28,6 +30,12 @@ declare class QrCodeWithLogo {
      * @returns
      */
     private _toImage;
+    /**
+     * 批量执行 resolve reject
+     * @param name
+     * @param err
+     */
+    private batchRunFunction;
     downloadImage(name?: string): Promise<boolean>;
     getImage(): Promise<HTMLImageElement>;
     getCanvas(): Promise<HTMLCanvasElement>;
