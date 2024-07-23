@@ -240,6 +240,14 @@ export class QRCanvas {
     return this.qrcodeArray[x + y * this.size] === 1
   }
 
+  isDisabled(x: number, y: number) {
+    return this.qrcodeArray[x + y * this.size] === 2
+  }
+
+  setDisabled(x: number, y: number) {
+    return this.qrcodeArray[x + y * this.size] = 2
+  }
+
   /**
    * 畫背景
    */
@@ -318,10 +326,12 @@ export class QRCanvas {
                 i + xOffset >= count ||
                 j + yOffset >= count
               )
-                return false
-              if (!filterDots(i + xOffset, j + yOffset)) return false
+                return null
+              if (!filterDots(i + xOffset, j + yOffset)) return null
               return this.isDark(i + xOffset, j + yOffset)
-            }
+            },
+            this,
+            i, j
           )
         }
       }

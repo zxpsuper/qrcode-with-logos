@@ -1,8 +1,18 @@
+import { QRCanvas } from "./QRCanvas"
+
 export type DrawArgs = {
+  /**x坐标实际像素位置 */
   x: number
+  /**y坐标实际像素位置 */
   y: number
+  /**单元像素尺寸 */
   size: number
   getNeighbor?: GetNeighbor
+  qrCanvas?: QRCanvas
+  /**x坐标 */
+  i?: number
+  /**y坐标 */
+  j?: number
 }
 
 export type RotateFigureArgs = {
@@ -34,7 +44,7 @@ export type BasicFigureDrawArgs = {
   rotation?: number
 }
 
-export type GetNeighbor = (x: number, y: number) => boolean
+export type GetNeighbor = (offsetX: number, offsetY: number) => boolean
 
 export type DrawArgsCanvas = DrawArgs & {
   context: CanvasRenderingContext2D
@@ -63,6 +73,7 @@ export type DotType =
   | 'fluid'
   | 'fluid-line'
   | 'stripe'
+  | 'stripe-row'
   | 'stripe-column'
 
 export type CornerType =

@@ -10,19 +10,23 @@ class QrCodeWithLogo {
   ifCanvasDrawed: boolean = false
   ifImageCreated: boolean = false
   private drawImagePromiseResolve: Function[] = []
+  private drawImagePromiseReject: Function[] = []
   private drawCanvasPromiseResolve: Function[] = []
+  private drawCanvasPromiseReject: Function[] = []
 
   private drawImagePromise() {
     if (this.ifImageCreated) return Promise.resolve()
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.drawImagePromiseResolve.push(resolve)
+      this.drawImagePromiseReject.push(reject)
     })
   }
 
   private drawCanvasPromise() {
     if (this.ifCanvasDrawed) return Promise.resolve()
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.drawCanvasPromiseResolve.push(resolve)
+      this.drawCanvasPromiseReject.push(reject)
     })
   }
 
@@ -52,11 +56,15 @@ class QrCodeWithLogo {
           if (options?.onError && isFunction(options.onError)) {
             options.onError(error)
           }
+          this.batchRunFunction('drawCanvasPromiseReject', error)
+          this.batchRunFunction('drawImagePromiseReject', error)
         })
     } catch (error) {
       if (options?.onError && isFunction(options.onError)) {
         options.onError(error)
       }
+      this.batchRunFunction('drawCanvasPromiseReject', error)
+      this.batchRunFunction('drawImagePromiseReject', error)
     }
   }
 
@@ -82,10 +90,7 @@ class QrCodeWithLogo {
     const qrCanvas = new QRCanvas(this.options)
     return qrCanvas.init().then(() => {
       this.ifCanvasDrawed = true
-      this.drawCanvasPromiseResolve.forEach((fn) => {
-        if (isFunction(fn)) fn()
-      })
-      this.drawCanvasPromiseResolve.length = 0
+      this.batchRunFunction('drawCanvasPromiseResolve')
     })
   }
 
@@ -96,11 +101,22 @@ class QrCodeWithLogo {
   private async _toImage(): Promise<void> {
     return toImage(this.options).then(() => {
       this.ifImageCreated = true
-      this.drawImagePromiseResolve.forEach((fn) => {
-        if (isFunction(fn)) fn()
-      })
-      this.drawImagePromiseResolve.length = 0
+      this.batchRunFunction('drawImagePromiseResolve')
     })
+  }
+  /**
+   * 批量执行 resolve reject
+   * @param name 
+   * @param err 
+   */
+  private batchRunFunction(name, err = null) {
+    const array = this[name]
+    if (Array.isArray(array)) {
+      array.forEach((fn) => {
+        if (isFunction(fn)) fn(err)
+      })
+      this[name].length = 0
+    }
   }
 
   public async downloadImage(name: string = defaultOptions.downloadName) {

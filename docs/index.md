@@ -132,6 +132,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
           'fluid',
           'fluid-line',
           'stripe',
+          'stripe-row',
           'stripe-column'
         ],
         cornerType: 'square',

@@ -1,3 +1,14 @@
+## v1.1.1
+
+### Features
+
+- **style:** update dots style for `fluid-line` `stripe` `stripe-row` and `stripe-column`.
+
+### Fixs
+
+- **Promise reject:** `getCanvas` and `getImage` do not reject error.
+- **options:** without cornerOptions will throw error, now it has default options.
+
 ## v1.1.0
 
 ### Features
