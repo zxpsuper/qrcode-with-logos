@@ -96,7 +96,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
 <script>
   // import QrCodeWithLogo from '../src/index'
   import QrCodeWithLogo from '../lib/qrcode-with-logos.esm'
-
+  import avatar from './avatar.jpg'
   function getBlobURL(blob) {
     if (!blob) return ''
     var url = null
@@ -118,7 +118,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
     data() {
       return {
         isClient: false,
-        logo: 'https://avatars.githubusercontent.com/u/28730619?v=4',
+        logo: avatar,
         dotType: 'square',
         dotColor: '#000',
         dotTypes: [
