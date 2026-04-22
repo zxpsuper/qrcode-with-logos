@@ -63,6 +63,15 @@ You also can set the different type of dots and corners respectively!
       </el-select>
     </div>
     <div style="margin-top: 16px">
+      content:
+      <el-input
+        v-model="qrContent"
+        placeholder="Enter QR code content"
+        style="width: 280px"
+        @input="createQrcode1"
+      />
+    </div>
+    <div style="margin-top: 16px">
       logo: 
       <el-upload
         class="upload-demo"
@@ -119,6 +128,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
       return {
         isClient: false,
         logo: avatar,
+        qrContent: 'https://github.com/zxpsuper',
         dotType: 'square',
         dotColor: '#000',
         dotTypes: [
@@ -157,7 +167,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
       createQrcode1(download = false) {
         try {
           let qrcode = new QrCodeWithLogo({
-            content: "https://github.com/zxpsuper",
+            content: this.qrContent,
             width: 1024,
             image: document.getElementById("image"),
             download,
