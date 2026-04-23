@@ -172,7 +172,9 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
             image: document.getElementById("image"),
             download,
             logo: {
-              src: this.logo
+              src: this.logo,
+              // borderWidth: 5
+              // borderRadius: 40
             },
             dotsOptions: {
               color: this.dotColor,
@@ -183,7 +185,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
               type: this.cornerType
             },
             nodeQrCodeOptions: {
-              margin: 20
+              margin: 4
             }
           });
 
