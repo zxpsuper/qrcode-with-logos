@@ -2,6 +2,31 @@
 title: qrcode-with-logos
 editLink: true
 layout: home
+head:
+  - - meta
+    - name: keywords
+      content: qrcode, qr code, qr code with logo, qrcode with logo, logo qr code, generate qr code, qr code generator, javascript qr code, qr code styling, colorful qr code, custom qr code
+  - - meta
+    - name: description
+      content: qrcode-with-logos is a powerful JavaScript library for generating QR codes with custom logos, styling options, and colorful designs.
+  - - meta
+    - property: og:title
+      content: qrcode-with-logos - Generate QR codes with logo and styling
+  - - meta
+    - property: og:description
+      content: A powerful JavaScript library for creating QR codes with logos, custom colors, and various styling options.
+  - - meta
+    - property: og:type
+      content: website
+  - - meta
+    - name: twitter:card
+      content: summary
+  - - meta
+    - name: twitter:title
+      content: qrcode-with-logos
+  - - meta
+    - name: twitter:description
+      content: Generate QR codes with logo and styling in JavaScript
 hero:
   name: qrcode-with-logos
   # text: QRcode-with-logos is a tool for creating a QRcode with a logo.
