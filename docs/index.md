@@ -256,7 +256,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
             dark: '#000',
             light: '#fff'
           },
-          errorCorrectionLevel: 'M'
+          errorCorrectionLevel: 'Q'
         }
       }
     },
