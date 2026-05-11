@@ -2,7 +2,7 @@ export default {
   // 站点级选项
   title: 'qrcode-with-logos',
   description: 'The tool for creating a QRcode with logo',
-  base: '/qrcode-with-logos/',
+  base: process.env.DEPLOY_ENV === 'VERCEL' || process.env.NETLIFY ? '/' : '/qrcode-with-logos/',
   lastUpdated: true,
   markdown: {
     image: {
