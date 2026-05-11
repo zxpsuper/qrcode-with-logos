@@ -2,6 +2,9 @@
   "name": "qrcode-with-logos",
   "version": "1.1.1",
   "description": "",
+  "engines": {
+    "node": "24.x"
+  },
   "main": "lib/qrcode-with-logos.common.js",
   "types": "types/index.d.ts",
   "module": "lib/qrcode-with-logos.esm.js",
