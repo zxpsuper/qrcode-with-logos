@@ -17,6 +17,9 @@ export default {
     // 主题级选项
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'About', link: '/about' },
+      { text: 'Contact', link: '/contact' },
+      { text: 'Privacy', link: '/privacy' },
       { text: 'Github', link: 'https://github.com/zxpsuper/qrcode-with-logos' },
     ],
     sidebar: [
