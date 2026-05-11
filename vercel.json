@@ -1,7 +1,8 @@
 {
+  "nodeVersion": "24.x",
   "functions": {
     "api/*.js": {
-      "nodeVersion": "24.x"
+      "runtime": "nodejs"
     }
   }
 }
