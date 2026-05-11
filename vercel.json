@@ -1,7 +1,1 @@
-{
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs"
-    }
-  }
-}
+{}
