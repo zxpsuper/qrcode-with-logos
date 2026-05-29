@@ -103,6 +103,9 @@ qrcode errorCorrectionLevel, such as "L", "M", "Q", "H"
 
 qrcode color
 
+> [!TIP]
+> All color fields automatically prepend `#` to hex values if missing. For example, `ff0000` is treated as `#ff0000`. Non-hex strings like `rgb(...)` or named colors are left unchanged.
+
 #### nodeQrCodeOptions.color.dark
 
 - Type: `string`

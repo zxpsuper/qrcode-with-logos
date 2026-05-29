@@ -3,6 +3,7 @@ export default class QRCorner {
     context: CanvasRenderingContext2D;
     cornerType: CornerType;
     color: string;
+    private drawMethodMap;
     constructor(context: CanvasRenderingContext2D, cornerType: CornerType, color: string);
     draw({ radius, x, y, dotSize }: BasicCornerDrawArgs): void;
     _drawRoundedCircle({ x, y, dotSize, radius }: BasicCornerDrawArgs): void;

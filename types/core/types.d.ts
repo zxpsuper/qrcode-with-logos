@@ -57,7 +57,6 @@ export interface Logo {
     src: string;
     logoRadius?: number;
     borderRadius?: number;
-    borderColor?: string;
     bgColor?: string;
     crossOrigin?: string;
     borderWidth?: number;
@@ -70,8 +69,9 @@ export interface NodeQrCodeOptions {
         light?: string;
     };
     errorCorrectionLevel?: ErrorCorrectionLevel;
-    scale?: any;
+    scale?: number;
 }
+export type DownloadFunction = (start: () => Promise<void>) => Promise<void>;
 export interface BaseOptions {
     content: string;
     width?: number;
@@ -79,7 +79,7 @@ export interface BaseOptions {
     logo?: Logo | string;
     canvas?: HTMLCanvasElement;
     image?: HTMLImageElement;
-    download?: boolean | Function;
+    download?: boolean | DownloadFunction;
     downloadName?: string;
     dotsOptions?: {
         type?: DotType;

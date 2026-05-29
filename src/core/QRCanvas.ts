@@ -1,7 +1,7 @@
 // @ts-ignore
 import QRCode from 'qrcode'
 import { BaseOptions, Logo } from './types'
-import { canvasRoundRect, getErrorCorrectionLevel, loadImage } from './utils'
+import { canvasRoundRect, getErrorCorrectionLevel, loadImage, normalizeColor } from './utils'
 import QRDot from './QRDot'
 import QRCorner from './QRCorner'
 import defaultOptions from './defaultOptions'
@@ -78,14 +78,14 @@ export class QRCanvas {
     this.options = options
     this.canvas.setAttribute('width', width + '')
     this.canvas.setAttribute('height', width + '')
-    this.saveQrdata(QRDATA)
+    this.saveQRData(QRDATA)
   }
 
   /**
    * 保存qrcode原始數據
    * @param QRDATA
    */
-  private saveQrdata(QRDATA: any) {
+  private saveQRData(QRDATA: any) {
     this.size = QRDATA.modules.size
     this.version = QRDATA.version
     this.qrcodeArray = QRDATA.modules.data
@@ -184,7 +184,7 @@ export class QRCanvas {
         logoHeight,
         borderRadius
       )
-      this.context.fillStyle = bgColor
+      this.context.fillStyle = normalizeColor(bgColor)
       this.context.fill()
 
       // 使用image绘制可以避免某些跨域情况
@@ -258,7 +258,7 @@ export class QRCanvas {
       nodeQrCodeOptions?.color?.light ||
       defaultOptions.nodeQrCodeOptions.color.light
     if (canvasContext) {
-      canvasContext.fillStyle = light
+      canvasContext.fillStyle = normalizeColor(light)
       canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height)
     }
   }
@@ -303,10 +303,11 @@ export class QRCanvas {
         type: this.options.dotsOptions?.type || defaultOptions.dotsOptions.type,
         dotSize
       })
-      canvasContext.fillStyle = canvasContext.strokeStyle =
+      canvasContext.fillStyle = canvasContext.strokeStyle = normalizeColor(
         this.options.dotsOptions?.color ||
-        this.options.nodeQrCodeOptions?.color?.dark ||
-        defaultOptions.dotsOptions.color
+          this.options.nodeQrCodeOptions?.color?.dark ||
+          defaultOptions.dotsOptions.color
+      )
 
       for (let i = 0; i < count; i++) {
         for (let j = 0; j < count; j++) {
@@ -346,18 +347,10 @@ export class QRCanvas {
     const canvasContext = this.context
     if (canvasContext) {
       const { nodeQrCodeOptions } = this.options
-      const margin =
-        nodeQrCodeOptions?.margin || defaultOptions.nodeQrCodeOptions.margin
       const count = this.size
-      const width = this.options.width || defaultOptions.width
-      /**二维码除去margin的实际宽度 */
-      const minSize = width - margin * 2
-      /**每个像素点宽度 */
-      const dotSize = Math.floor(minSize / count)
-      /**二维码起始位置x */
-      const xBeginning = Math.floor((width - count * dotSize) / 2)
-      /**二维码起始位置y */
-      const yBeginning = Math.floor((width - count * dotSize) / 2)
+      const dotSize = this.dotSize
+      const xBeginning = this.offset
+      const yBeginning = this.offset
 
       ;[
         [0, 0],
@@ -370,14 +363,16 @@ export class QRCanvas {
         const corner = new QRCorner(
           this.context,
           cornersOptions.type || defaultOptions.cornersOptions.type,
-          cornersOptions.color ||
-            nodeQrCodeOptions?.color?.dark ||
-            defaultOptions.cornersOptions.color
+          normalizeColor(
+            cornersOptions.color ||
+              nodeQrCodeOptions?.color?.dark ||
+              defaultOptions.cornersOptions.color
+          )
         )
         corner.draw({
           x,
           y,
-          dotSize: this.dotSize,
+          dotSize,
           radius: cornersOptions.radius
         })
       })

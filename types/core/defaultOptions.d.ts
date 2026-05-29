@@ -1,12 +1,13 @@
-import { CornerType, DotType } from "./types";
-declare const _default: {
-    logo: {
-        bgColor: string;
-        borderWidth: number;
-        crossOrigin: string;
-        borderRadius: number;
-        logoRadius: number;
-    };
+import { CornerType, DotType } from './types';
+interface LogoDefaults {
+    bgColor: string;
+    borderWidth: number;
+    crossOrigin: string;
+    borderRadius: number;
+    logoRadius: number;
+}
+interface DefaultOptions {
+    logo: LogoDefaults;
     width: number;
     download: boolean;
     downloadName: string;
@@ -25,5 +26,6 @@ declare const _default: {
         type: CornerType;
         color: string;
     };
-};
-export default _default;
+}
+declare const defaultOptions: DefaultOptions;
+export default defaultOptions;

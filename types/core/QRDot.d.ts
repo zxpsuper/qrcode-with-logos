@@ -1,16 +1,16 @@
 import { QRCanvas } from './QRCanvas';
-import { BasicFigureDrawArgsCanvas, DrawDotArgsCanvas, DotType, DrawArgsCanvas, GetNeighbor, RotateFigureArgsCanvas } from './types';
-type QRDotOptions = {
-    context: CanvasRenderingContext2D;
-    type: DotType;
-    dotSize: number;
-};
+import { BasicFigureDrawArgsCanvas, DrawDotArgsCanvas, DotType, DrawArgsCanvas, RotateFigureArgsCanvas } from './types';
 export default class QRDot {
     _context: CanvasRenderingContext2D;
     _type: DotType;
     dotSize: number;
-    constructor(options: QRDotOptions);
-    draw(x: number, y: number, getNeighbor: GetNeighbor, qrCanvas: QRCanvas, i: number, j: number): void;
+    private drawMethodMap;
+    constructor(options: {
+        context: CanvasRenderingContext2D;
+        type: DotType;
+        dotSize: number;
+    });
+    draw(x: number, y: number, getNeighbor: (offsetX: number, offsetY: number) => boolean | null, qrCanvas: QRCanvas, i: number, j: number): void;
     _drawSquare({ x, y, size, context }: DrawArgsCanvas): void;
     _basicSquare(args: BasicFigureDrawArgsCanvas): void;
     _drawDot(args: DrawArgsCanvas): void;
@@ -27,4 +27,3 @@ export default class QRDot {
     _drawStripe({ x, y, size, context, qrCanvas, i, j }: DrawArgsCanvas, type?: 'row' | 'column' | 'default'): void;
     _rotateFigure({ x, y, size, context, rotation, draw }: RotateFigureArgsCanvas): void;
 }
-export {};

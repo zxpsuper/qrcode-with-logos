@@ -1,4 +1,12 @@
 import { BaseOptions, ErrorCorrectionLevel } from './types';
+/**
+ * Normalize hex color strings: auto-prepend '#' if missing.
+ * Handles 3/4/6/8 digit hex (e.g. 'fff', 'ffff', 'ffffff', 'ffffffff').
+ * Non-hex strings (rgb, named colors, etc.) are returned unchanged.
+ * @param color
+ * @returns
+ */
+export declare function normalizeColor(color: string): string;
 export declare function getErrorCorrectionLevel(content: string): ErrorCorrectionLevel;
 /**
  * load image, resolve image
@@ -7,7 +15,7 @@ export declare function getErrorCorrectionLevel(content: string): ErrorCorrectio
  * @param crossOrigin
  * @returns
  */
-export declare function loadImage(logoSrc: string, crossOrigin: string): Promise<HTMLImageElement>;
+export declare function loadImage(logoSrc: string, crossOrigin?: string): Promise<HTMLImageElement>;
 /**
  * draw radius
  * 繪製帶圓角的綫條
@@ -20,14 +28,14 @@ export declare const canvasRoundRect: (ctx: CanvasRenderingContext2D) => (x: num
  * Determine if it is a function
  * @param o {function} 函數
  */
-export declare function isFunction(o: any): boolean;
+export declare function isFunction(o: unknown): boolean;
 /**
  * canvas get base64 url and set image src value, if need download image, auto download image
  * 獲取 canvas base64 並賦值給 image 的 src 屬性
  * @param options
  * @returns
  */
-export declare const toImage: (options: BaseOptions) => Promise<any>;
+export declare const toImage: (options: BaseOptions) => Promise<void>;
 /**
  * save image 保存圖片
  * @param image HTMLImageElement
@@ -35,21 +43,3 @@ export declare const toImage: (options: BaseOptions) => Promise<any>;
  * @returns
  */
 export declare const saveImage: (image: HTMLImageElement, name: string) => Promise<boolean>;
-/**
- * promisify promise化，使得promisify(func).then()更加方便，不用每次都構造 promise
- * Making Promise more convenient, without having to construct a promise every time
- * @param f {function} 異步函數
- */
-export declare const promisify: (f: Function) => Function;
-/**
- * 判斷是不是字符串
- * Determine if it is a string
- * @param o {string} 字符串
- */
-export declare function isString(o: any): boolean;
-/**
- * 判斷是不是 image dom 節點
- * Determine if it is a dom
- * @param o image dom 節點
- */
-export declare function isImageDom(o: any): boolean;

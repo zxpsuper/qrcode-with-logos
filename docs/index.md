@@ -76,7 +76,7 @@ You also can set the different type of dots and corners respectively!
       </el-collapse-item>
       <el-collapse-item title="Dots Options" name="dots">
         <div>
-          dots.color: <el-color-picker v-model="dotColor" @change="createQrcode1"></el-color-picker>
+          dots.color: <el-color-picker v-model="dotColor" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           dots.type: 
@@ -92,7 +92,7 @@ You also can set the different type of dots and corners respectively!
       </el-collapse-item>
       <el-collapse-item title="Corners Options" name="corners">
         <div>
-          corners.color: <el-color-picker v-model="cornerColor" @change="createQrcode1"></el-color-picker>
+          corners.color: <el-color-picker v-model="cornerColor" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           corners.type: 
@@ -122,12 +122,8 @@ You also can set the different type of dots and corners respectively!
           <el-input-number v-model="logoOptions.borderWidth" :min="0" :max="100" @change="createQrcode1"></el-input-number>
         </div>
         <div style="margin-top: 16px">
-          logo.borderColor:
-          <el-color-picker v-model="logoOptions.borderColor" @change="createQrcode1"></el-color-picker>
-        </div>
-        <div style="margin-top: 16px">
           logo.bgColor:
-          <el-color-picker v-model="logoOptions.bgColor" @change="createQrcode1"></el-color-picker>
+          <el-color-picker v-model="logoOptions.bgColor" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           logo.borderRadius:
@@ -145,11 +141,11 @@ You also can set the different type of dots and corners respectively!
         </div>
         <div style="margin-top: 16px">
           nodeQrCodeOptions.color.dark:
-          <el-color-picker v-model="nodeQrCodeOptions.color.dark" @change="createQrcode1"></el-color-picker>
+          <el-color-picker v-model="nodeQrCodeOptions.color.dark" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           nodeQrCodeOptions.color.light:
-          <el-color-picker v-model="nodeQrCodeOptions.color.light" @change="createQrcode1"></el-color-picker>
+          <el-color-picker v-model="nodeQrCodeOptions.color.light" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           nodeQrCodeOptions.errorCorrectionLevel:
@@ -218,7 +214,6 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
         logo: avatar,
         logoOptions: {
           borderWidth: 10,
-          borderColor: '#000',
           bgColor: '#fff',
           borderRadius: 8,
           logoRadius: 0

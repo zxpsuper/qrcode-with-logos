@@ -23,7 +23,7 @@ export declare class QRCanvas {
      * 保存qrcode原始數據
      * @param QRDATA
      */
-    private saveQrdata;
+    private saveQRData;
     /**初始化 */
     init(): Promise<void>;
     drawLogo(): Promise<Function | null>;

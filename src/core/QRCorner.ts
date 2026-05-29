@@ -4,55 +4,36 @@ import {
   RotationCornerDrawArgs
 } from './types'
 
-interface CornerTypes {
-  [key: string]: CornerType
-}
-
-const cornerTypes = {
-  square: 'square',
-  rounded: 'rounded',
-  circle: 'circle',
-  roundedCircle: 'rounded-circle',
-  circleRounded: 'circle-rounded',
-  circleDiamond: 'circle-diamond',
-  circleStar: 'circle-star'
-} as CornerTypes
+type DrawMethod = (args: BasicCornerDrawArgs) => void
 
 export default class QRCorner {
+  context: CanvasRenderingContext2D
+  cornerType: CornerType
+  color: string
+
+  private drawMethodMap: Record<CornerType, DrawMethod> = {
+    'square': (args) => this._drawSquare(args),
+    'rounded': (args) => this._drawRounded(args),
+    'circle': (args) => this._drawCircle(args),
+    'rounded-circle': (args) => this._drawRoundedCircle(args),
+    'circle-rounded': (args) => this._drawCircleRounded(args),
+    'circle-diamond': (args) => this._drawCircleDiamond(args),
+    'circle-star': (args) => this._drawCircleStar(args)
+  }
+
   constructor(
-    public context: CanvasRenderingContext2D,
-    public cornerType: CornerType,
-    public color: string
-  ) {}
+    context: CanvasRenderingContext2D,
+    cornerType: CornerType,
+    color: string
+  ) {
+    this.context = context
+    this.cornerType = cornerType
+    this.color = color
+  }
 
   draw({ radius, x, y, dotSize }: BasicCornerDrawArgs) {
-    let drawFunction
-    switch (this.cornerType) {
-      case cornerTypes.circle:
-        drawFunction = this._drawCircle
-        break
-      case cornerTypes.rounded:
-        drawFunction = this._drawRounded
-        break
-      case cornerTypes.roundedCircle:
-        drawFunction = this._drawRoundedCircle
-        break
-      case cornerTypes.circleRounded:
-        drawFunction = this._drawCircleRounded
-        break
-      case cornerTypes.circleDiamond:
-        drawFunction = this._drawCircleDiamond
-        break
-      case cornerTypes.circleStar:
-        drawFunction = this._drawCircleStar
-        break
-      case cornerTypes.square:
-      default:
-        drawFunction = this._drawSquare
-        break
-    }
-
-    drawFunction.call(this, { x, y, radius, dotSize })
+    const drawFunction = this.drawMethodMap[this.cornerType] || this.drawMethodMap['square']
+    drawFunction({ x, y, radius, dotSize })
   }
 
   _drawRoundedCircle({ x, y, dotSize, radius }: BasicCornerDrawArgs) {
@@ -139,9 +120,8 @@ export default class QRCorner {
     radius,
     rotation = 0
   }: RotationCornerDrawArgs) {
-    const lineWidth = Math.ceil(dotSize)
-    let radiusOuter
-    let radiusInner
+    let radiusOuter: number
+    let radiusInner: number
     if (typeof radius !== 'number') {
       radiusOuter = radius.outer || 0
       radiusInner = radius.inner || 0
@@ -152,16 +132,16 @@ export default class QRCorner {
 
     let size = dotSize * 7
     // Outer box
-    this.drawRoundedSquare(lineWidth, x, y, size, radiusOuter, false, rotation)
+    this.drawRoundedSquare(dotSize, x, y, size, radiusOuter, false, rotation)
     // Inner box
     size = dotSize * 3
     y += dotSize * 2
     x += dotSize * 2
-    this.drawRoundedSquare(lineWidth, x, y, size, radiusInner, true, rotation)
+    this.drawRoundedSquare(dotSize, x, y, size, radiusInner, true, rotation)
   }
 
   private drawCircle(
-    lineWidth: number,
+    dotSize: number,
     x: number,
     y: number,
     size: number,
@@ -169,12 +149,13 @@ export default class QRCorner {
   ) {
     const ctx = this.context
     const color = this.color
-    ctx.lineWidth = lineWidth
+    ctx.save()
+    ctx.lineWidth = dotSize
     ctx.fillStyle = color
     ctx.strokeStyle = color
     y += size / 2
     x += size / 2
-    size -= lineWidth
+    size -= dotSize
     ctx.beginPath()
     ctx.arc(x, y, size / 2, 0, Math.PI * 2)
     ctx.stroke()
@@ -182,10 +163,11 @@ export default class QRCorner {
     if (fill) {
       ctx.fill()
     }
+    ctx.restore()
   }
 
   private drawRoundedSquare(
-    lineWidth: number,
+    dotSize: number,
     x: number,
     y: number,
     size: number,
@@ -195,13 +177,14 @@ export default class QRCorner {
   ) {
     const ctx = this.context
     const color = this.color
-    ctx.lineWidth = lineWidth
+    ctx.save()
+    ctx.lineWidth = dotSize
     ctx.fillStyle = color
     ctx.strokeStyle = color
     // Adjust coordinates so that the outside of the stroke is aligned to the edges
-    y += lineWidth / 2
-    x += lineWidth / 2
-    size -= lineWidth
+    y += dotSize / 2
+    x += dotSize / 2
+    size -= dotSize
     if (!Array.isArray(radius)) {
       radius = [radius, radius, radius, radius]
     }
@@ -219,7 +202,7 @@ export default class QRCorner {
     const cy = y + size / 2
     const originX = -size / 2
     ctx.translate(cx, cy)
-    rotation && ctx.rotate(rotation)
+    if (rotation) ctx.rotate(rotation)
     ctx.moveTo(originX + rTopLeft, originX)
     ctx.lineTo(originX + size - rTopRight, originX)
     if (rTopRight)
@@ -254,14 +237,14 @@ export default class QRCorner {
     if (fill) {
       ctx.fill()
     }
-    rotation && ctx.rotate(-rotation)
-    ctx.translate(-cx, -cy)
+    ctx.restore()
   }
 
   private drawInnerStar(x: number, y: number, size: number) {
     const context = this.context
     const cx = x + size / 2
     const cy = y + size / 2
+    context.save()
     context.translate(cx, cy)
     context.beginPath()
     context.moveTo(-size / 2, -size / 2)
@@ -271,6 +254,6 @@ export default class QRCorner {
     context.quadraticCurveTo(-size / 4, 0, -size / 2, -size / 2)
     context.closePath()
     context.fill()
-    context.translate(-cx, -cy)
+    context.restore()
   }
 }
