@@ -23,7 +23,9 @@
     "test:watch": "jest --watch",
     "build": "npm test && npm run build:min && npm run build:rollup && npm run build:type",
     "build:rollup": "rollup -c",
-    "build:min": "webpack --config ./webpack.config.js"
+    "build:min": "webpack --config ./webpack.config.js",
+    "test:e2e": "npm run build && jest --config e2e/jest.config.js && node e2e/esm.test.mjs",
+    "test:e2e:quick": "jest --config e2e/jest.config.js && node e2e/esm.test.mjs"
   },
   "keywords": [
     "qr-code",
