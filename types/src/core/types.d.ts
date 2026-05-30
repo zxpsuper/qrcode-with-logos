@@ -60,10 +60,6 @@ export interface Logo {
     bgColor?: string;
     crossOrigin?: string;
     borderWidth?: number;
-    /** Width of logo image (required when src is data URL in Node.js environment) */
-    width?: number;
-    /** Height of logo image (required when src is data URL in Node.js environment) */
-    height?: number;
 }
 export type ErrorCorrectionLevel = 'L' | 'Q' | 'M' | 'H';
 export interface NodeQrCodeOptions {

@@ -39,20 +39,21 @@ export function loadImage(
   logoSrc: string,
   crossOrigin?: string
 ): Promise<HTMLImageElement> {
-  const image = new Image()
-  if (crossOrigin) {
-    image.setAttribute('crossOrigin', crossOrigin)
-  } else {
-    image.setAttribute('crossOrigin', 'anonymous')
-  }
-  image.src = logoSrc
   return new Promise((resolve, reject) => {
+    const image = new Image()
+    // Set onload/onerror before setting src to ensure they're registered
     image.onload = () => {
       resolve(image)
     }
     image.onerror = () => {
       reject('logo load fail!')
     }
+    if (crossOrigin) {
+      image.setAttribute('crossOrigin', crossOrigin)
+    } else {
+      image.setAttribute('crossOrigin', 'anonymous')
+    }
+    image.src = logoSrc
   })
 }
 

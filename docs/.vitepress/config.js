@@ -2,7 +2,8 @@ export default {
   // 站点级选项
   title: 'qrcode-with-logos',
   description: 'The tool for creating a QRcode with logo',
-  base: process.env.DEPLOY_ENV === 'VERCEL' || process.env.NETLIFY ? '/' : '/qrcode-with-logos/',
+  // 本地开发时使用根路径，部署到 GitHub Pages 时使用子路径
+  base: process.env.NODE_ENV === 'production' && process.env.DEPLOY_ENV !== 'VERCEL' && process.env.DEPLOY_ENV !== 'NETLIFY' ? '/qrcode-with-logos/' : '/',
   lastUpdated: true,
   markdown: {
     image: {

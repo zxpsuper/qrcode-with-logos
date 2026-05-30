@@ -92,6 +92,10 @@ export interface Logo {
   bgColor?: string
   crossOrigin?: string
   borderWidth?: number
+  /** Width of logo image (required when src is data URL in Node.js environment) */
+  width?: number
+  /** Height of logo image (required when src is data URL in Node.js environment) */
+  height?: number
 }
 export type ErrorCorrectionLevel = 'L' | 'Q' | 'M' | 'H'
 export interface NodeQrCodeOptions {
@@ -105,6 +109,35 @@ export interface NodeQrCodeOptions {
 }
 
 export type DownloadFunction = (start: () => Promise<void>) => Promise<void>
+
+export type RendererType = 'canvas' | 'svg'
+
+/** Minimal interface for QR data access used by SVG dot rendering */
+export interface QrDataProvider {
+  isDark(x: number, y: number): boolean
+  setDisabled(x: number, y: number): void
+  isDisabled(x: number, y: number): boolean
+}
+
+export interface SvgDrawArgs {
+  x: number
+  y: number
+  size: number
+  getNeighbor?: GetNeighbor
+  qrData?: QrDataProvider
+  i?: number
+  j?: number
+}
+
+export interface SvgCornerDrawArgs {
+  x: number
+  y: number
+  dotSize: number
+  radius?: number | {
+    inner?: number
+    outer?: number
+  }
+}
 
 export interface BaseOptions {
   content: string
@@ -129,5 +162,6 @@ export interface BaseOptions {
           outer: number
         }
   }
+  renderer?: RendererType
   onError?: (err: Error) => void
 }

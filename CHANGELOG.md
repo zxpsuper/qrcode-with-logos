@@ -1,3 +1,22 @@
+## v1.2.0
+
+### Features
+
+- **SVG Renderer:** New `renderer: 'svg'` option to generate QR code as SVG string instead of canvas.
+- **Node.js Support:** SVG renderer works in Node.js environment without browser APIs.
+- **API:** New `getSvgString()` method to get SVG output.
+- **Types:** Improved TypeScript definitions with proper type exports.
+
+### Tests
+
+- **Unit Tests:** Comprehensive unit tests for QRCanvas, QRCorner, QRDot, and utility functions.
+- **E2E Tests:** End-to-end tests for CJS, UMD, ESM bundles and Node.js environment.
+
+### Improvements
+
+- **Build:** Enhanced build configuration with better type generation.
+- **Engine:** Node.js >=16.0.0 required.
+
 ## v1.1.1
 
 ### Features

@@ -1,6 +1,6 @@
 {
   "name": "qrcode-with-logos",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "",
   "engines": {
     "node": ">=16.0.0"
@@ -24,8 +24,9 @@
     "build": "npm test && npm run build:min && npm run build:rollup && npm run build:type",
     "build:rollup": "rollup -c",
     "build:min": "webpack --config ./webpack.config.js",
-    "test:e2e": "npm run build && jest --config e2e/jest.config.js && node e2e/esm.test.mjs",
-    "test:e2e:quick": "jest --config e2e/jest.config.js && node e2e/esm.test.mjs"
+    "test:e2e": "npm run build && jest --config e2e/jest.config.js && jest --config e2e/jest.config.node.js && node e2e/esm.test.mjs",
+    "test:e2e:quick": "jest --config e2e/jest.config.js && jest --config e2e/jest.config.node.js && node e2e/esm.test.mjs",
+    "test:e2e:node": "jest --config e2e/jest.config.node.js"
   },
   "keywords": [
     "qr-code",
@@ -48,6 +49,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^6.0.3",
     "@types/jest": "^30.0.0",
     "element-plus": "^2.7.5",
     "jest": "^30.4.2",

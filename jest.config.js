@@ -6,7 +6,8 @@ module.exports = {
   transform: {
     '^.+\\.ts$': ['ts-jest', {
       tsconfig: {
-        resolveJsonModule: true
+        resolveJsonModule: true,
+        esModuleInterop: true
       }
     }],
   },

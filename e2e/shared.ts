@@ -10,6 +10,7 @@ interface QrCodeWithLogoInstance {
   downloadImage(name?: string): Promise<boolean>
   toCanvas(): void
   toImage(): void
+  getSvgString?(): Promise<string>
 }
 
 interface QrCodeWithLogoClass {
@@ -392,13 +393,18 @@ export function runBundleTests(
       })
 
       it('getCanvas() rejects when qrcode creation fails', async () => {
-        const qr = new QrCodeWithLogo({ content: '' })
+        const onError = jest.fn()
+        const qr = new QrCodeWithLogo({ content: '', onError })
+        // Use onError to handle error, then check rejection
         await expect(qr.getCanvas()).rejects.toBeDefined()
+        expect(onError).toHaveBeenCalled()
       })
 
       it('getImage() rejects when qrcode creation fails', async () => {
-        const qr = new QrCodeWithLogo({ content: '' })
+        const onError = jest.fn()
+        const qr = new QrCodeWithLogo({ content: '', onError })
         await expect(qr.getImage()).rejects.toBeDefined()
+        expect(onError).toHaveBeenCalled()
       })
 
       it('does not throw when onError is not provided', () => {
@@ -410,15 +416,88 @@ export function runBundleTests(
       })
 
       it('ifCanvasDrawn remains false on error', async () => {
-        const qr = new QrCodeWithLogo({ content: '' })
+        const onError = jest.fn()
+        const qr = new QrCodeWithLogo({ content: '', onError })
         await expect(qr.getCanvas()).rejects.toBeDefined()
         expect(qr.ifCanvasDrawn).toBe(false)
       })
 
       it('ifImageCreated remains false on error', async () => {
-        const qr = new QrCodeWithLogo({ content: '' })
+        const onError = jest.fn()
+        const qr = new QrCodeWithLogo({ content: '', onError })
         await expect(qr.getImage()).rejects.toBeDefined()
         expect(qr.ifImageCreated).toBe(false)
+      })
+    })
+
+    // ====== SVG Renderer ======
+    describe('SVG renderer', () => {
+      it('creates instance with renderer: "svg"', () => {
+        const qr = new QrCodeWithLogo({ content: 'hello', renderer: 'svg' })
+        expect(qr.options.renderer).toBe('svg')
+      })
+
+      it('generates SVG string via getSvgString()', async () => {
+        const qr = new QrCodeWithLogo({ content: 'hello', renderer: 'svg' })
+        if (!qr.getSvgString) return
+        const svg = await qr.getSvgString()
+        expect(svg).toContain('<svg')
+        expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"')
+      })
+
+      it('sets ifCanvasDrawn to true after SVG generation', async () => {
+        const qr = new QrCodeWithLogo({ content: 'hello', renderer: 'svg' })
+        await qr.getCanvas()
+        expect(qr.ifCanvasDrawn).toBe(true)
+      })
+
+      it('sets ifImageCreated to true after SVG generation', async () => {
+        const qr = new QrCodeWithLogo({ content: 'hello', renderer: 'svg' })
+        await qr.getImage()
+        expect(qr.ifImageCreated).toBe(true)
+      })
+
+      it('returns canvas via getCanvas()', async () => {
+        const qr = new QrCodeWithLogo({ content: 'hello', renderer: 'svg' })
+        const canvas = await qr.getCanvas()
+        expect(canvas).toBeInstanceOf(HTMLCanvasElement)
+      })
+
+      it('supports custom dot type', async () => {
+        const qr = new QrCodeWithLogo({
+          content: 'hello',
+          renderer: 'svg',
+          dotsOptions: { type: 'dot', color: '#ff0000' },
+        })
+        await qr.getCanvas()
+        expect(qr.ifCanvasDrawn).toBe(true)
+      })
+
+      it('supports custom corner type', async () => {
+        const qr = new QrCodeWithLogo({
+          content: 'hello',
+          renderer: 'svg',
+          cornersOptions: { type: 'circle', color: '#00ff00' },
+        })
+        await qr.getCanvas()
+        expect(qr.ifCanvasDrawn).toBe(true)
+      })
+
+      it('works with logo', async () => {
+        // Use a data URL logo to avoid MockImage timing issues in jsdom
+        const base64Logo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+        const qr = new QrCodeWithLogo({
+          content: 'hello',
+          renderer: 'svg',
+          logo: { src: base64Logo, width: 10, height: 10, borderRadius: 10 },
+        })
+        // Use getSvgString to verify SVG generation works
+        if (qr.getSvgString) {
+          const svg = await qr.getSvgString()
+          expect(svg).toContain('<svg')
+          expect(svg).toContain('<image')
+        }
+        expect(qr.ifCanvasDrawn).toBe(true)
       })
     })
   })

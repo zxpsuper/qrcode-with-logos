@@ -8,7 +8,20 @@
       "Bash(npm uninstall *)",
       "Bash(npm test *)",
       "Bash(npx jest *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(cp qrcode-with-logos.common.js qrcode-with-logos.common.js.bak)",
+      "Bash(sed 's/if \\(this.options.renderer === .svg.\\)/console.log\\(\"DEBUG renderer:\", this.options.renderer, \"content:\", this.options.content\\); if \\(this.options.renderer === \"svg\"\\)/' qrcode-with-logos.common.js.bak)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s http://localhost:5175/)",
+      "Bash(curl -s http://localhost:5175/about.html)",
+      "Bash(curl -s http://localhost:5175/guide/getting-started.html)",
+      "Bash(curl -s \"http://localhost:5175/@fs/E:/github/qrcode-with-logos/lib/qrcode-with-logos.esm.js\")",
+      "Bash(rm -rf E:/github/qrcode-with-logos/docs/.vitepress/cache)",
+      "Bash(pkill -f vitepress)",
+      "Bash(curl -s http://localhost:5177/)",
+      "Bash(curl -s \"http://localhost:5177/avatar.jpg\")",
+      "Bash(jest --config e2e/jest.config.js)",
+      "Bash(npm pack *)"
     ]
   }
 }

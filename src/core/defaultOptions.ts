@@ -1,4 +1,4 @@
-import { BaseOptions, CornerType, DotType } from './types'
+import { BaseOptions, CornerType, DotType, RendererType } from './types'
 
 interface LogoDefaults {
   bgColor: string
@@ -28,6 +28,7 @@ interface DefaultOptions {
     type: CornerType
     color: string
   }
+  renderer: RendererType
 }
 
 const defaultOptions: DefaultOptions = {
@@ -55,7 +56,8 @@ const defaultOptions: DefaultOptions = {
   cornersOptions: {
     type: 'square' as CornerType,
     color: '#000'
-  }
+  },
+  renderer: 'canvas' as RendererType
 }
 
 export default defaultOptions

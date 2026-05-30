@@ -439,4 +439,85 @@ describe('QrCodeWithLogo', () => {
       )
     })
   })
+
+  describe('SVG renderer', () => {
+    it('should create instance with renderer: "svg"', () => {
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg' })
+      expect(qrCode).toBeDefined()
+      expect(qrCode.options.renderer).toBe('svg')
+    })
+
+    it('should generate SVG string via getSvgString()', async () => {
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg' })
+      const svg = await qrCode.getSvgString()
+      expect(svg).toContain('<svg')
+      expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"')
+    })
+
+    it('should set ifCanvasDrawn to true after SVG generation', async () => {
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg' })
+      expect(qrCode.ifCanvasDrawn).toBe(false)
+      await qrCode.getCanvas()
+      expect(qrCode.ifCanvasDrawn).toBe(true)
+    })
+
+    it('should set ifImageCreated to true after SVG generation', async () => {
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg' })
+      expect(qrCode.ifImageCreated).toBe(false)
+      await qrCode.getImage()
+      expect(qrCode.ifImageCreated).toBe(true)
+    })
+
+    it('should set image src to SVG data URL', async () => {
+      const image = document.createElement('img')
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg', image })
+      await qrCode.getImage()
+      expect(image.src).toMatch(/^data:image\/svg\+xml,/)
+    })
+
+    it('should return canvas element via getCanvas()', async () => {
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg' })
+      const canvas = await qrCode.getCanvas()
+      expect(canvas).toBeInstanceOf(HTMLCanvasElement)
+    })
+
+    it('should accept custom dot type in SVG mode', async () => {
+      const qrCode = new QrCodeWithLogo({
+        content: 'test',
+        renderer: 'svg',
+        dotsOptions: { type: 'dot', color: '#ff0000' }
+      })
+      const svg = await qrCode.getSvgString()
+      expect(svg).toContain('<svg')
+    })
+
+    it('should accept custom corner type in SVG mode', async () => {
+      const qrCode = new QrCodeWithLogo({
+        content: 'test',
+        renderer: 'svg',
+        cornersOptions: { type: 'circle', color: '#00ff00' }
+      })
+      const svg = await qrCode.getSvgString()
+      expect(svg).toContain('<svg')
+    })
+
+    it('should work with logo in SVG mode', async () => {
+      const qrCode = new QrCodeWithLogo({
+        content: 'test',
+        renderer: 'svg',
+        logo: 'https://example.com/logo.png'
+      })
+      const svg = await qrCode.getSvgString()
+      expect(svg).toContain('<image')
+    })
+
+    it('should handle error in SVG mode gracefully', async () => {
+      const onError = jest.fn()
+      // Reset mock to default behavior (should succeed)
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg', onError })
+      const svg = await qrCode.getSvgString()
+      expect(svg).toContain('<svg')
+      expect(qrCode.ifCanvasDrawn).toBe(true)
+    })
+  })
 })

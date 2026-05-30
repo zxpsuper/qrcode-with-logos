@@ -171,6 +171,63 @@ It is the logo background color
 - Type: `string`
 - Default: `Anonymous`
 
+### logo.width
+
+- Type: `number`
+
+Width of the logo image. Required when using SVG renderer with a base64 data URL logo in Node.js environment.
+
+### logo.height
+
+- Type: `number`
+
+Height of the logo image. Required when using SVG renderer with a base64 data URL logo in Node.js environment.
+
+## renderer
+
+- Type: `"canvas" | "svg"`
+- Default: `canvas`
+
+Choose the rendering method. When set to `svg`, the library generates an SVG string instead of drawing on a canvas.
+
+> [!TIP]
+> SVG output is useful when you need:
+> - Scalable QR codes that look crisp at any size
+> - Vector graphics for print or design workflows
+> - Direct SVG string output for embedding in HTML
+
+> [!WARNING]
+> **Node.js Compatibility**:
+>
+> | Bundle | Browser | Node.js |
+> |--------|---------|---------|
+> | CJS (`common.js`) | ✅ | ✅ |
+> | UMD (`min.js`) | ✅ | ✅ |
+> | ESM (`esm.js`) | ✅ | ❌ |
+>
+> **Node.js usage**:
+> - Canvas renderer: ❌ Not supported (requires browser APIs)
+> - SVG renderer (no logo): ✅ Fully supported
+> - SVG renderer + base64 logo: ✅ Supported (provide `width` and `height`)
+> - SVG renderer + URL logo: ❌ Not supported (requires `new Image()`)
+>
+> ```js
+> // Node.js example with SVG + base64 logo
+> const QrCodeWithLogo = require('qrcode-with-logos');
+>
+> const qr = new QrCodeWithLogo({
+>   content: 'https://example.com',
+>   renderer: 'svg',
+>   logo: {
+>     src: 'data:image/png;base64,iVBORw0KGgo...', // base64 data URL
+>     width: 100,  // required for base64 logos in Node.js
+>     height: 100, // required for base64 logos in Node.js
+>   }
+> });
+>
+> const svgString = await qr.getSvgString();
+> ```
+
 ## dotsOptions
 
 - Type: `Object`
