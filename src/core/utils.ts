@@ -1,5 +1,21 @@
 import { BaseOptions, ErrorCorrectionLevel } from './types'
 
+/**
+ * Normalize hex color strings: auto-prepend '#' if missing.
+ * Handles 3/4/6/8 digit hex (e.g. 'fff', 'ffff', 'ffffff', 'ffffffff').
+ * Non-hex strings (rgb, named colors, etc.) are returned unchanged.
+ * @param color
+ * @returns
+ */
+export function normalizeColor(color: string): string {
+  if (!color) return color
+  if (color.charAt(0) === '#') return color
+  if (/^[0-9a-fA-F]{3,4}$|^[0-9a-fA-F]{6}$|^[0-9a-fA-F]{8}$/.test(color)) {
+    return '#' + color
+  }
+  return color
+}
+
 // 對於内容少的qrcode，增大容錯率
 // Increase the fault tolerance for QrCode with less content
 export function getErrorCorrectionLevel(content: string): ErrorCorrectionLevel {
@@ -21,18 +37,23 @@ export function getErrorCorrectionLevel(content: string): ErrorCorrectionLevel {
  */
 export function loadImage(
   logoSrc: string,
-  crossOrigin: string
+  crossOrigin?: string
 ): Promise<HTMLImageElement> {
-  const image = new Image()
-  image.setAttribute('crossOrigin', crossOrigin || 'anonymous')
-  image.src = logoSrc
   return new Promise((resolve, reject) => {
+    const image = new Image()
+    // Set onload/onerror before setting src to ensure they're registered
     image.onload = () => {
       resolve(image)
     }
     image.onerror = () => {
       reject('logo load fail!')
     }
+    if (crossOrigin) {
+      image.setAttribute('crossOrigin', crossOrigin)
+    } else {
+      image.setAttribute('crossOrigin', 'anonymous')
+    }
+    image.src = logoSrc
   })
 }
 
@@ -64,7 +85,7 @@ export const canvasRoundRect =
  * Determine if it is a function
  * @param o {function} 函數
  */
-export function isFunction(o: any): boolean {
+export function isFunction(o: unknown): boolean {
   return typeof o === 'function'
 }
 
@@ -75,10 +96,13 @@ export function isFunction(o: any): boolean {
  * @returns
  */
 export const toImage = async function (options: BaseOptions) {
-  let { canvas, download } = options
-  const { image, downloadName } = options
-  if (canvas!.toDataURL()) {
-    image!.src = canvas!.toDataURL()
+  const { canvas, image, download, downloadName } = options
+  if (!canvas) {
+    throw new Error('Canvas element is required')
+  }
+  const dataURL = canvas.toDataURL()
+  if (dataURL) {
+    image!.src = dataURL
   } else {
     throw new Error('Can not get the canvas DataURL')
   }
@@ -86,13 +110,14 @@ export const toImage = async function (options: BaseOptions) {
     return
   }
   // download also can be a function
-  download =
-    download === true ? (start: Function): Promise<void> => start() : download
-  const startDownload = () => {
-    return saveImage(image!, downloadName)
+  const startDownload = (): Promise<void> => {
+    return saveImage(image!, downloadName!) as unknown as Promise<void>
   }
-  if (download) {
-    return download(startDownload)
+  if (download === true) {
+    return startDownload()
+  }
+  if (isFunction(download)) {
+    return (download as (start: () => Promise<void>) => Promise<void>)(startDownload)
   }
   return Promise.resolve()
 }
@@ -113,47 +138,12 @@ export const saveImage = (
       const link = document.createElement('a')
       link.download = name
       link.href = dataURL
+      document.body.appendChild(link)
       link.dispatchEvent(new MouseEvent('click'))
+      document.body.removeChild(link)
       resolve(true)
     } catch (err) {
       reject(err)
     }
   })
-}
-
-/**
- * promisify promise化，使得promisify(func).then()更加方便，不用每次都構造 promise
- * Making Promise more convenient, without having to construct a promise every time
- * @param f {function} 異步函數
- */
-
-export const promisify = (f: Function): Function => {
-  return function () {
-    const args = Array.prototype.slice.call(arguments)
-    return new Promise(function (resolve, reject) {
-      args.push(function (err: object, result: object) {
-        if (err) reject(err)
-        else resolve(result)
-      })
-      f.apply(null, args)
-    })
-  }
-}
-
-/**
- * 判斷是不是字符串
- * Determine if it is a string
- * @param o {string} 字符串
- */
-export function isString(o: any): boolean {
-  return typeof o === 'string'
-}
-
-/**
- * 判斷是不是 image dom 節點
- * Determine if it is a dom
- * @param o image dom 節點
- */
-export function isImageDom(o: any): boolean {
-  return o && ['IMAGE', 'IMG'].includes(o.tagName)
 }

@@ -1,34 +1,29 @@
 import { QRCanvas } from './core/QRCanvas'
+import { QRSvg } from './core/QRSvg'
 import defaultOptions from './core/defaultOptions'
 import { toImage, saveImage, isFunction } from './core/utils'
 import { BaseOptions } from './core/types'
-import { version } from '../package.json'
+
+// VERSION will be replaced by rollup at build time
+const VERSION = '0.0.0'
 
 class QrCodeWithLogo {
-  static version: string = version
+  static version: string = VERSION
   options: BaseOptions
-  ifCanvasDrawed: boolean = false
+  ifCanvasDrawn: boolean = false
   ifImageCreated: boolean = false
-  private drawImagePromiseResolve: Function[] = []
-  private drawImagePromiseReject: Function[] = []
-  private drawCanvasPromiseResolve: Function[] = []
-  private drawCanvasPromiseReject: Function[] = []
 
-  private drawImagePromise() {
-    if (this.ifImageCreated) return Promise.resolve()
-    return new Promise((resolve, reject) => {
-      this.drawImagePromiseResolve.push(resolve)
-      this.drawImagePromiseReject.push(reject)
-    })
-  }
+  private canvasPromise: Promise<void>
+  private imagePromise: Promise<void>
+  private canvasResolve!: () => void
+  private canvasReject!: (err: unknown) => void
+  private imageResolve!: () => void
+  private imageReject!: (err: unknown) => void
 
-  private drawCanvasPromise() {
-    if (this.ifCanvasDrawed) return Promise.resolve()
-    return new Promise((resolve, reject) => {
-      this.drawCanvasPromiseResolve.push(resolve)
-      this.drawCanvasPromiseReject.push(reject)
-    })
-  }
+  private svgString: string | null = null
+  private svgPromise: Promise<void>
+  private svgResolve!: () => void
+  private svgReject!: (err: unknown) => void
 
   private defaultOption: BaseOptions = {
     canvas: undefined,
@@ -39,32 +34,100 @@ class QrCodeWithLogo {
     downloadName: defaultOptions.downloadName,
     nodeQrCodeOptions: {},
     cornersOptions: {},
-    dotsOptions: {}
+    dotsOptions: {},
+    renderer: defaultOptions.renderer
   }
 
   constructor(options: BaseOptions) {
+    this.canvasPromise = new Promise<void>((resolve, reject) => {
+      this.canvasResolve = resolve
+      this.canvasReject = reject
+    })
+    this.imagePromise = new Promise<void>((resolve, reject) => {
+      this.imageResolve = resolve
+      this.imageReject = reject
+    })
+    this.svgPromise = new Promise<void>((resolve, reject) => {
+      this.svgResolve = resolve
+      this.svgReject = reject
+    })
+
+    // Check environment before try block - throw synchronously for clear error
+    const isBrowser = typeof document !== 'undefined'
+    const renderer = options.renderer || defaultOptions.renderer
+
+    if (renderer !== 'svg' && !isBrowser) {
+      throw new Error('Canvas renderer requires browser environment. Use renderer: "svg" for Node.js.')
+    }
+
     try {
-      this.options = Object.assign(this.defaultOption, options)
-      if (!this.options.canvas)
-        this.options.canvas = document.createElement('canvas')
-      if (!this.options.image) this.options.image = document.createElement('img')
-      this._toCanvas()
-        .then(() => {
-          return this._toImage()
-        })
-        .catch((error) => {
-          if (options?.onError && isFunction(options.onError)) {
-            options.onError(error)
+      this.options = Object.assign({}, this.defaultOption, options)
+
+      // Only create canvas/image elements in browser environment or when needed
+      if (this.options.renderer === 'svg') {
+        // SVG mode: canvas/image only needed for backward compatibility (getImage)
+        // In Node.js without canvas/image provided, skip creation
+        if (isBrowser) {
+          if (!this.options.canvas) {
+            this.options.canvas = document.createElement('canvas')
           }
-          this.batchRunFunction('drawCanvasPromiseReject', error)
-          this.batchRunFunction('drawImagePromiseReject', error)
-        })
+          if (!this.options.image) {
+            this.options.image = document.createElement('img')
+          }
+        } else {
+          // Node.js: use dummy elements if not provided
+          // getImage/getCanvas will still fail but getSvgString works
+          if (!this.options.canvas) {
+            this.options.canvas = undefined as unknown as HTMLCanvasElement
+          }
+          if (!this.options.image) {
+            this.options.image = undefined as unknown as HTMLImageElement
+          }
+        }
+      } else {
+        // Canvas mode: browser environment already verified above
+        if (!this.options.canvas) {
+          this.options.canvas = document.createElement('canvas')
+        }
+        if (!this.options.image) {
+          this.options.image = document.createElement('img')
+        }
+      }
+
+      if (this.options.renderer === 'svg') {
+        this._toSvg()
+          .then(() => {
+            this.svgResolve()
+          })
+          .catch((error) => {
+            if (options?.onError && isFunction(options.onError)) {
+              options.onError(error)
+            }
+            this.svgReject(error)
+            this.canvasReject(error)
+            this.imageReject(error)
+          })
+      } else {
+        this.svgResolve()
+        this._toCanvas()
+          .then(() => {
+            return this._toImage()
+          })
+          .catch((error) => {
+            if (options?.onError && isFunction(options.onError)) {
+              options.onError(error)
+            }
+            this.canvasReject(error)
+            this.imageReject(error)
+          })
+      }
     } catch (error) {
       if (options?.onError && isFunction(options.onError)) {
         options.onError(error)
       }
-      this.batchRunFunction('drawCanvasPromiseReject', error)
-      this.batchRunFunction('drawImagePromiseReject', error)
+      this.canvasReject(error)
+      this.imageReject(error)
+      this.svgReject(error)
     }
   }
 
@@ -89,9 +152,29 @@ class QrCodeWithLogo {
   private _toCanvas(): Promise<void> {
     const qrCanvas = new QRCanvas(this.options)
     return qrCanvas.init().then(() => {
-      this.ifCanvasDrawed = true
-      this.batchRunFunction('drawCanvasPromiseResolve')
+      this.ifCanvasDrawn = true
+      this.canvasResolve()
     })
+  }
+
+  /**
+   * Generate SVG string via QRSvg.
+   * Also draws SVG onto canvas and sets image.src for backward compatibility.
+   */
+  private async _toSvg(): Promise<void> {
+    const qrSvg = new QRSvg(this.options)
+    const svgStr = await qrSvg.init()
+    this.svgString = svgStr
+    this.ifCanvasDrawn = true
+    this.canvasResolve()
+
+    // Convert SVG to data URL and set as image source
+    const dataUrl = 'data:image/svg+xml,' + encodeURIComponent(svgStr)
+    if (this.options.image) {
+      this.options.image.src = dataUrl
+    }
+    this.ifImageCreated = true
+    this.imageResolve()
   }
 
   /**
@@ -101,36 +184,34 @@ class QrCodeWithLogo {
   private async _toImage(): Promise<void> {
     return toImage(this.options).then(() => {
       this.ifImageCreated = true
-      this.batchRunFunction('drawImagePromiseResolve')
+      this.imageResolve()
     })
   }
+
   /**
-   * 批量执行 resolve reject
-   * @param name 
-   * @param err 
+   * Get the generated SVG string.
+   * Only available when renderer is 'svg'. Throws if renderer is 'canvas'.
    */
-  private batchRunFunction(name, err = null) {
-    const array = this[name]
-    if (Array.isArray(array)) {
-      array.forEach((fn) => {
-        if (isFunction(fn)) fn(err)
-      })
-      this[name].length = 0
+  public async getSvgString(): Promise<string> {
+    await this.svgPromise
+    if (this.svgString === null) {
+      throw new Error('SVG string is not available. Use renderer: "svg" option.')
     }
+    return this.svgString
   }
 
   public async downloadImage(name: string = defaultOptions.downloadName) {
-    await this.drawImagePromise()
+    await this.imagePromise
     return saveImage(this.options.image!, name)
   }
 
   public async getImage(): Promise<HTMLImageElement> {
-    await this.drawImagePromise()
+    await this.imagePromise
     return this.options.image!
   }
 
   public async getCanvas(): Promise<HTMLCanvasElement> {
-    await this.drawCanvasPromise()
+    await this.canvasPromise
     return this.options.canvas!
   }
 }

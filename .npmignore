@@ -1,17 +1,51 @@
-.cache/
-.github/
-dist/
-docs/
-images/
+# Source code
 src/
-.gitignore
-.npmignore
-.npmrc
-index.css
-index.html
-index.ts
-package-lock.json
+
+# Tests
+src/__tests__/
+e2e/
+jest.config.js
+e2e/jest.config.js
+e2e/jest.config.node.js
+coverage/
+
+# Build configs
+webpack.config.js
 rollup.config.js
 tsconfig.json
-webpack.config.js
+tsconfig.build.json
+.cache/
+dist/
+
+# Documentation site
+docs/
+
+# Demo files
+index.html
+index.ts
+index.css
+images/
+
+# Git
+.git/
+.github/
+.gitignore
+
+# IDE/Editor
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+.claudeignore
+CLAUDE.md
+AGENTS.md
+
+# Other configs
+.npmignore
+.npmrc
 .prettierrc
+vercel.json
+
+# Lock files
+package-lock.json

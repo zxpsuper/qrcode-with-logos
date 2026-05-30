@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build output
+lib/
+dist/
+types/
+
+# Docs
+docs/
+
+# Cache
+.cache/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+
+# Environment
+.env
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Images
+images/
+
+# Lockfile (noisy diffs)
+package-lock.json
+
+# Configuration (usually not needed for context)
+.prettierrc
+.npmrc
+.npmignore
+
+# Git
+.git/
+
+# GitHub
+.github/

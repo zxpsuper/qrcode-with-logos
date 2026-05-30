@@ -52,15 +52,16 @@ It depend on `qrcode@1.5.3` and be more powerful than qrcode.
 It can create a canvas or a image for the QRcode and even you can use the method to download the file if you want.
 
 > [!TIP]
-> qrcode-with-logos use canvas to draw qrcode which is colorful and styleful, so it only can be use in browser but not nodejs！
+> Canvas renderer requires browser environment. For Node.js, use `renderer: 'svg'` to generate QR code as SVG string.
 
 You can set the colors of dots and corners respectively.
 
 You also can set the different type of dots and corners respectively!
 
+<div v-if="isClient">
 <el-row :gutter="20">
   <el-col :span="12"><img id="image" style="width: 280px"/></el-col>
-  <el-col :span="12" v-if="isClient">
+  <el-col :span="12">
     <el-collapse v-model="activeCollapse">
       <el-collapse-item title="Content" name="content">
         <div>
@@ -76,7 +77,7 @@ You also can set the different type of dots and corners respectively!
       </el-collapse-item>
       <el-collapse-item title="Dots Options" name="dots">
         <div>
-          dots.color: <el-color-picker v-model="dotColor" @change="createQrcode1"></el-color-picker>
+          dots.color: <el-color-picker v-model="dotColor" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           dots.type: 
@@ -92,7 +93,7 @@ You also can set the different type of dots and corners respectively!
       </el-collapse-item>
       <el-collapse-item title="Corners Options" name="corners">
         <div>
-          corners.color: <el-color-picker v-model="cornerColor" @change="createQrcode1"></el-color-picker>
+          corners.color: <el-color-picker v-model="cornerColor" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           corners.type: 
@@ -122,12 +123,8 @@ You also can set the different type of dots and corners respectively!
           <el-input-number v-model="logoOptions.borderWidth" :min="0" :max="100" @change="createQrcode1"></el-input-number>
         </div>
         <div style="margin-top: 16px">
-          logo.borderColor:
-          <el-color-picker v-model="logoOptions.borderColor" @change="createQrcode1"></el-color-picker>
-        </div>
-        <div style="margin-top: 16px">
           logo.bgColor:
-          <el-color-picker v-model="logoOptions.bgColor" @change="createQrcode1"></el-color-picker>
+          <el-color-picker v-model="logoOptions.bgColor" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           logo.borderRadius:
@@ -138,6 +135,15 @@ You also can set the different type of dots and corners respectively!
           <el-input-number v-model="logoOptions.logoRadius" :min="0" :max="100" @change="createQrcode1"></el-input-number>
         </div>
       </el-collapse-item>
+      <el-collapse-item title="Renderer" name="renderer">
+        <div>
+          renderer:
+          <el-select v-model="renderer" placeholder="Select" style="width: 200px" @change="createQrcode1">
+            <el-option label="canvas" value="canvas"></el-option>
+            <el-option label="svg" value="svg"></el-option>
+          </el-select>
+        </div>
+      </el-collapse-item>
       <el-collapse-item title="Node QR Code Options" name="nodeQrCode">
         <div>
           nodeQrCodeOptions.margin:
@@ -145,11 +151,11 @@ You also can set the different type of dots and corners respectively!
         </div>
         <div style="margin-top: 16px">
           nodeQrCodeOptions.color.dark:
-          <el-color-picker v-model="nodeQrCodeOptions.color.dark" @change="createQrcode1"></el-color-picker>
+          <el-color-picker v-model="nodeQrCodeOptions.color.dark" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           nodeQrCodeOptions.color.light:
-          <el-color-picker v-model="nodeQrCodeOptions.color.light" @change="createQrcode1"></el-color-picker>
+          <el-color-picker v-model="nodeQrCodeOptions.color.light" @change="createQrcode1" show-alpha></el-color-picker>
         </div>
         <div style="margin-top: 16px">
           nodeQrCodeOptions.errorCorrectionLevel:
@@ -168,6 +174,7 @@ You also can set the different type of dots and corners respectively!
     </div>
   </el-col>
 </el-row>
+</div>
 
 ## Dependencies
 
@@ -184,8 +191,8 @@ You also can set the different type of dots and corners respectively!
 If you have some question or advise, you can send me a E-mail(zxpscau@163.com) or open an [issue](https://github.com/zxpsuper/qrcode-with-logos/issues/new).
 
 <script>
-  // import QrCodeWithLogo from '../src/index'
-  import QrCodeWithLogo from '../lib/qrcode-with-logos.esm'
+  // Dynamic import to avoid SSR issues with Canvas API
+  let QrCodeWithLogo = null
   import avatar from './avatar.jpg'
   function getBlobURL(blob) {
     if (!blob) return ''
@@ -212,13 +219,13 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
     data() {
       return {
         isClient: false,
-        activeCollapse: ['dots', 'corners'],
+        isClient: false,
+        activeCollapse: ['dots', 'corners', 'renderer'],
         content: 'https://github.com/zxpsuper',
         width: 1024,
         logo: avatar,
         logoOptions: {
           borderWidth: 10,
-          borderColor: '#000',
           bgColor: '#fff',
           borderRadius: 8,
           logoRadius: 0
@@ -250,6 +257,7 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
           'circle-diamond',
           'circle-star'
         ],
+        renderer: 'canvas',
         nodeQrCodeOptions: {
           margin: 20,
           color: {
@@ -260,19 +268,24 @@ If you have some question or advise, you can send me a E-mail(zxpscau@163.com) o
         }
       }
     },
-    mounted() {
+    async mounted() {
       this.isClient = true
+      // Dynamic import to avoid SSR issues
+      const module = await import('../lib/qrcode-with-logos.esm')
+      QrCodeWithLogo = module.default
       this.createQrcode1()
 
     },
     methods: {
       createQrcode1(download = false) {
+        if (!QrCodeWithLogo) return
         try {
           let qrcode = new QrCodeWithLogo({
             content: this.content,
             width: this.width,
             image: document.getElementById("image"),
             download,
+            renderer: this.renderer,
             logo: {
               src: this.logo,
               ...this.logoOptions

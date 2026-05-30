@@ -2,14 +2,18 @@ import { BaseOptions } from './core/types';
 declare class QrCodeWithLogo {
     static version: string;
     options: BaseOptions;
-    ifCanvasDrawed: boolean;
+    ifCanvasDrawn: boolean;
     ifImageCreated: boolean;
-    private drawImagePromiseResolve;
-    private drawImagePromiseReject;
-    private drawCanvasPromiseResolve;
-    private drawCanvasPromiseReject;
-    private drawImagePromise;
-    private drawCanvasPromise;
+    private canvasPromise;
+    private imagePromise;
+    private canvasResolve;
+    private canvasReject;
+    private imageResolve;
+    private imageReject;
+    private svgString;
+    private svgPromise;
+    private svgResolve;
+    private svgReject;
     private defaultOption;
     constructor(options: BaseOptions);
     /**
@@ -26,16 +30,20 @@ declare class QrCodeWithLogo {
      */
     private _toCanvas;
     /**
+     * Generate SVG string via QRSvg.
+     * Also draws SVG onto canvas and sets image.src for backward compatibility.
+     */
+    private _toSvg;
+    /**
      * Get image base64 and set image's src attribute .
      * @returns
      */
     private _toImage;
     /**
-     * 批量执行 resolve reject
-     * @param name
-     * @param err
+     * Get the generated SVG string.
+     * Only available when renderer is 'svg'. Throws if renderer is 'canvas'.
      */
-    private batchRunFunction;
+    getSvgString(): Promise<string>;
     downloadImage(name?: string): Promise<boolean>;
     getImage(): Promise<HTMLImageElement>;
     getCanvas(): Promise<HTMLCanvasElement>;

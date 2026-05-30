@@ -57,6 +57,34 @@ qrcode.getImage().then((image) => {
 })
 ```
 
+## getSvgString()
+
+Return `Promise<string>`, get the generated SVG string. Only available when `renderer: "svg"` is set.
+
+```js
+let qrcode = new QrCodeWithLogo({
+  content: 'https://github.com/zxpsuper',
+  renderer: 'svg',
+  logo: {
+    src: 'https://avatars1.githubusercontent.com/u/28730619?s=460&v=4'
+  }
+})
+
+qrcode.getSvgString().then((svg) => {
+  // svg is a complete SVG XML string
+  console.log(svg) // "<svg xmlns=\"http://www.w3.org/2000/svg\" ...>...</svg>"
+  
+  // You can embed it directly in HTML
+  document.body.innerHTML = svg
+  
+  // Or use it as a data URL
+  const dataUrl = 'data:image/svg+xml,' + encodeURIComponent(svg)
+})
+```
+
+> [!NOTE]
+> When using `renderer: "svg"`, `getCanvas()` still returns a canvas element (for backward compatibility), but it won't contain the QR code drawing. Use `getSvgString()` to get the actual SVG output.
+
 ## toCanvas()
 
 - `Deprecated`

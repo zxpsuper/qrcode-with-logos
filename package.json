@@ -1,9 +1,9 @@
 {
   "name": "qrcode-with-logos",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "",
   "engines": {
-    "node": "20.x"
+    "node": ">=16.0.0"
   },
   "packageManager": "npm@10.x",
   "main": "lib/qrcode-with-logos.common.js",
@@ -18,10 +18,15 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "build:type": "tsc --module commonjs",
-    "build": "npm run build:min && npm run build:rollup",
+    "build:type": "tsc -p tsconfig.build.json",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "build": "npm test && npm run build:min && npm run build:rollup && npm run build:type",
     "build:rollup": "rollup -c",
-    "build:min": "webpack --config ./webpack.config.js"
+    "build:min": "webpack --config ./webpack.config.js",
+    "test:e2e": "npm run build && jest --config e2e/jest.config.js && jest --config e2e/jest.config.node.js && node e2e/esm.test.mjs",
+    "test:e2e:quick": "jest --config e2e/jest.config.js && jest --config e2e/jest.config.node.js && node e2e/esm.test.mjs",
+    "test:e2e:node": "jest --config e2e/jest.config.node.js"
   },
   "keywords": [
     "qr-code",
@@ -44,7 +49,11 @@
     "registry": "https://registry.npmjs.org"
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^6.0.3",
+    "@types/jest": "^30.0.0",
     "element-plus": "^2.7.5",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "parcel-bundler": "^1.12.4",
     "rollup": "^2.33.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -53,13 +62,14 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript": "^1.0.1",
+    "terser-webpack-plugin": "^5.6.1",
+    "ts-jest": "^29.4.11",
     "ts-loader": "^8.0.12",
     "tslib": "^2.0.3",
     "typescript": "^5.5.2",
-    "uglifyjs-webpack-plugin": "^2.2.0",
     "vitepress": "^1.2.3",
-    "webpack": "^4.35.0",
-    "webpack-cli": "^3.3.5"
+    "webpack": "^5.107.2",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "qrcode": "^1.4.4"
