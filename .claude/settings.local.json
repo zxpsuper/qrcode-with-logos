@@ -21,7 +21,11 @@
       "Bash(curl -s http://localhost:5177/)",
       "Bash(curl -s \"http://localhost:5177/avatar.jpg\")",
       "Bash(jest --config e2e/jest.config.js)",
-      "Bash(npm pack *)"
+      "Bash(npm pack *)",
+      "Bash(netstat -ano)",
+      "Bash(curl *)",
+      "Bash(ps -p 33904 -o comm=)",
+      "Bash(tasklist //FI \"PID eq 33904\")"
     ]
   }
 }

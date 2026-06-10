@@ -1,3 +1,18 @@
+## v1.2.1
+
+### Fixs
+
+- **SVG circle-rounded corner:** Inner rectangle x-offset mismatch — missing `+ 2 * dotSize` caused leftward shift.
+- **SVG circle / rounded-circle inner circle:** Radius too large — missing `- dotSize` stroke adjustment, now matches canvas output.
+- **SVG download:** `_toSvg()` now renders SVG onto canvas and downloads as PNG when `download: true`.
+- **SVG downloadImage():** Works in SVG mode — renders SVG to canvas then saves as PNG.
+- **SVG logo in download:** Logo no longer blank — canvas-render approach bypasses SVG-in-img nested data URL security restriction.
+- **QRDot rounded centering:** Offset computed from original dot size instead of shrunken size — dots now center within grid cell.
+- **getNeighbor type safety:** Returns `false` instead of `null` for out-of-bounds/filtered cases, matching `boolean` return type.
+- **Default option mutation:** Constructor uses spread (`{...this.defaultOption, ...options}`) instead of `Object.assign(this.defaultOption, options)` — prevents modifying shared defaults across instances.
+- **Logo context isolation:** `_drawLogo` wrapper uses `context.save()`/`context.restore()` instead of manual translate compensation — prevents transform state leaks.
+- **Test infrastructure:** Added `URL.createObjectURL`/`URL.revokeObjectURL` mocks for jsdom compatibility.
+
 ## v1.2.0
 
 ### Features

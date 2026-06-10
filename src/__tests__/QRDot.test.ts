@@ -389,6 +389,24 @@ describe('QRDot', () => {
       expect(ctx.save).toHaveBeenCalled()
       expect(ctx.restore).toHaveBeenCalled()
     })
+
+    it('should center rounded dot within original dot position', () => {
+      qrDot = new QRDot({
+        context: ctx,
+        type: 'rounded',
+        dotSize: 20
+      })
+
+      qrDot.draw(100, 100, getNeighbor, mockQrCanvas, 0, 0)
+
+      // size shrinks to 0.75 * 20 = 15, offset = ((1-0.75)/2) * 20 = 2.5
+      // center = 102.5 + 15/2 = 110, original center = 110
+      // Verify translate called with correct center coordinates
+      const translateCalls = (ctx.translate as jest.Mock).mock.calls
+      const lastTranslate = translateCalls[translateCalls.length - 1]
+      expect(lastTranslate[0]).toBe(110)
+      expect(lastTranslate[1]).toBe(110)
+    })
   })
 
   describe('stripe behavior', () => {

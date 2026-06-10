@@ -76,7 +76,7 @@ export default class SvgCorner {
     return (
       this._drawOuterCircle(x, y, dotSize, false) +
       this._drawRoundedSquare(
-        x,
+        x + 2 * dotSize,
         y + 2 * dotSize,
         dotSize,
         dotSize * 3,
@@ -161,7 +161,7 @@ export default class SvgCorner {
     const innerSize = dotSize * 3
     const cx = x + 2 * dotSize + innerSize / 2
     const cy = y + 2 * dotSize + innerSize / 2
-    const r = innerSize / 2
+    const r = (innerSize - dotSize) / 2
     const attrs: Record<string, string> = {
       fill: fill ? this.fill : 'none',
       stroke: this.fill,

@@ -97,3 +97,9 @@ class MockImage {
 // Mock document.body methods
 document.body.appendChild = jest.fn();
 document.body.removeChild = jest.fn();
+
+// Mock URL.createObjectURL / revokeObjectURL (not available in jsdom)
+if (typeof URL !== 'undefined') {
+  (URL as any).createObjectURL = jest.fn(() => 'blob:mock-uuid');
+  (URL as any).revokeObjectURL = jest.fn();
+}

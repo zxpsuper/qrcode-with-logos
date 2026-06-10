@@ -175,6 +175,40 @@ class QrCodeWithLogo {
     }
     this.ifImageCreated = true
     this.imageResolve()
+
+    // Handle download option — render SVG onto canvas for reliable PNG download
+    const { download, downloadName } = this.options
+    if (download !== true && !isFunction(download)) {
+      return
+    }
+    const startDownload = async (): Promise<void> => {
+      const width = this.options.width || defaultOptions.width
+      const img = new Image()
+      img.src = 'data:image/svg+xml,' + encodeURIComponent(svgStr)
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = () => reject(new Error('Failed to render SVG for download'))
+      })
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = width
+      const ctx = canvas.getContext('2d')
+      if (!ctx) throw new Error('Failed to get canvas context')
+      ctx.drawImage(img, 0, 0, width, width)
+      const dataUrl = canvas.toDataURL('image/png')
+      const link = document.createElement('a')
+      link.download = downloadName || defaultOptions.downloadName
+      link.href = dataUrl
+      document.body.appendChild(link)
+      link.dispatchEvent(new MouseEvent('click'))
+      document.body.removeChild(link)
+    }
+    if (download === true) {
+      return startDownload()
+    }
+    if (isFunction(download)) {
+      return (download as (start: () => Promise<void>) => Promise<void>)(startDownload)
+    }
   }
 
   /**
@@ -202,6 +236,30 @@ class QrCodeWithLogo {
 
   public async downloadImage(name: string = defaultOptions.downloadName) {
     await this.imagePromise
+    if (this.options.renderer === 'svg' && this.svgString) {
+      // Render SVG onto canvas, download as PNG (preserves logo data URL)
+      const width = this.options.width || defaultOptions.width
+      const img = new Image()
+      img.src = 'data:image/svg+xml,' + encodeURIComponent(this.svgString)
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = () => reject(new Error('Failed to render SVG for download'))
+      })
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = width
+      const ctx = canvas.getContext('2d')
+      if (!ctx) throw new Error('Failed to get canvas context')
+      ctx.drawImage(img, 0, 0, width, width)
+      const dataUrl = canvas.toDataURL('image/png')
+      const link = document.createElement('a')
+      link.download = name
+      link.href = dataUrl
+      document.body.appendChild(link)
+      link.dispatchEvent(new MouseEvent('click'))
+      document.body.removeChild(link)
+      return true
+    }
     return saveImage(this.options.image!, name)
   }
 

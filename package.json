@@ -1,6 +1,6 @@
 {
   "name": "qrcode-with-logos",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "engines": {
     "node": ">=16.0.0"

@@ -174,6 +174,7 @@ export class QRCanvas {
     }
 
     return function () {
+      context.save()
       const cx = canvas.width / 2
       const cy = canvas.height / 2
       context.translate(cx, cy)
@@ -184,8 +185,8 @@ export class QRCanvas {
         logoHeight,
         borderRadius
       )
-      this.context.fillStyle = normalizeColor(bgColor)
-      this.context.fill()
+      context.fillStyle = normalizeColor(bgColor)
+      context.fill()
 
       // 使用image绘制可以避免某些跨域情况
       // Use image drawing to avoid some cross-domain situations
@@ -224,11 +225,10 @@ export class QRCanvas {
       if (logoRadius) {
         context.translate(-logoInnerWidth / 2, -logoInnerHeight / 2)
         drawLogoWithCanvas()
-        context.translate(-cx + logoInnerWidth / 2, -cy + logoInnerHeight / 2)
       } else {
         drawLogoWithImage()
-        context.translate(-cx, -cy)
       }
+      context.restore()
     }
   }
 
@@ -327,8 +327,8 @@ export class QRCanvas {
                 i + xOffset >= count ||
                 j + yOffset >= count
               )
-                return null
-              if (!filterDots(i + xOffset, j + yOffset)) return null
+                return false
+              if (!filterDots(i + xOffset, j + yOffset)) return false
               return this.isDark(i + xOffset, j + yOffset)
             },
             this,

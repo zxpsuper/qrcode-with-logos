@@ -95,6 +95,25 @@ describe('QrCodeWithLogo', () => {
       expect(qrCode.options.downloadName).toBeDefined()
     })
 
+    it('should not mutate defaultOption via Object.assign', () => {
+      // Multiple instances should each get fresh defaults merged with their options
+      const qrCode1 = new QrCodeWithLogo({
+        content: 'first',
+        width: 400
+      })
+      const qrCode2 = new QrCodeWithLogo({
+        content: 'second',
+        width: 500,
+        downloadName: 'custom.png'
+      })
+      // qrCode2 options should not leak into qrCode1
+      expect(qrCode1.options.downloadName).toBe('qr-code.png')
+      expect(qrCode1.options.content).toBe('first')
+      expect(qrCode1.options.width).toBe(400)
+      // qrCode1 width should not be 500 (from qrCode2)
+      expect(qrCode1.options.width).not.toBe(500)
+    })
+
     it('should default download to false', () => {
       const qrCode = new QrCodeWithLogo({ content: 'test' })
       expect(qrCode.options.download).toBe(false)
@@ -518,6 +537,37 @@ describe('QrCodeWithLogo', () => {
       const svg = await qrCode.getSvgString()
       expect(svg).toContain('<svg')
       expect(qrCode.ifCanvasDrawn).toBe(true)
+    })
+
+    it('should trigger download when download=true in SVG mode', async () => {
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg', download: true, downloadName: 'qr.svg' })
+      // Wait for svgPromise (resolved after _toSvg + download complete)
+      const svg = await qrCode.getSvgString()
+      expect(svg).toContain('<svg')
+      // should have triggered saveImage (dispatch click on anchor)
+      expect(document.body.appendChild).toHaveBeenCalled()
+      expect(document.body.removeChild).toHaveBeenCalled()
+    })
+
+    it('should call custom download function in SVG mode', async () => {
+      const customDownload = jest.fn(async (start: () => Promise<void>) => {})
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg', download: customDownload, downloadName: 'qr.svg' })
+      await qrCode.getSvgString()
+      expect(customDownload).toHaveBeenCalledWith(expect.any(Function))
+    })
+
+    it('should not trigger download when download=false in SVG mode', async () => {
+      // Track anchor creation to verify no download was initiated
+      const origCreateElement = document.createElement.bind(document)
+      let anchorCount = 0
+      jest.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+        if (tag === 'a') anchorCount++
+        return origCreateElement(tag)
+      })
+      const qrCode = new QrCodeWithLogo({ content: 'test', renderer: 'svg', download: false })
+      await qrCode.getImage()
+      expect(anchorCount).toBe(0)
+      ;(document.createElement as jest.Mock).mockRestore()
     })
   })
 })

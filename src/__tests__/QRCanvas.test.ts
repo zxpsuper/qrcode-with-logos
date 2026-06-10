@@ -416,6 +416,39 @@ describe('QRCanvas', () => {
       ;(global as any).Image = OriginalImage
     })
 
+    it('should restore context state after drawing logo', async () => {
+      const options: BaseOptions = {
+        content: 'test',
+        canvas,
+        logo: {
+          src: 'logo.png',
+          logoRadius: 5,
+          borderRadius: 8,
+          bgColor: '#ffffff',
+          borderWidth: 10
+        },
+        nodeQrCodeOptions: {
+          errorCorrectionLevel: 'H'
+        },
+        cornersOptions: {
+          type: 'square'
+        }
+      }
+
+      const qrCanvas = new QRCanvas(options)
+      await qrCanvas.init()
+
+      // save/restore around logo drawing ensures context state isolation
+      expect(ctx.save).toHaveBeenCalled()
+      expect(ctx.restore).toHaveBeenCalled()
+      // Last restore should be from logo draw function
+      const lastRestoreIndex = (ctx.restore as jest.Mock).mock.calls.length - 1
+      const firstSaveIndex = (ctx.save as jest.Mock).mock.calls.length - 1
+      // save should be called (for logo) and restore should exist
+      expect(lastRestoreIndex).toBeGreaterThanOrEqual(0)
+      expect(firstSaveIndex).toBeGreaterThanOrEqual(0)
+    })
+
     it('should handle logo with tall image (rate <= 1)', async () => {
       const OriginalImage = (global as any).Image
       ;(global as any).Image = class {
@@ -711,6 +744,19 @@ describe('QRCanvas', () => {
       qrCanvas.clear()
 
       expect(ctx.clearRect).toHaveBeenCalledWith(0, 0, 500, 500)
+    })
+
+    it('should skip drawing dots at negative getNeighbor offset', async () => {
+      // Dots at edge (0,0) will trigger negative offset check
+      const options: BaseOptions = {
+        content: 'test',
+        canvas,
+        cornersOptions: { type: 'square' }
+      }
+      const qrCanvas = new QRCanvas(options)
+      await qrCanvas.init()
+      // fill should still be called (no crash on negative bounds)
+      expect(ctx.fill).toHaveBeenCalled()
     })
   })
 

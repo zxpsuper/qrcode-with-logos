@@ -93,9 +93,11 @@ export default class QRDot {
   }
 
   _drawRounded({ x, y, size, context }: DrawArgsCanvas) {
-    size = 0.75 * size
-    x += (1 / 8) * size
-    y += (1 / 8) * size
+    const sizeRate = 0.75
+    const offset = ((1 - sizeRate) / 2) * size
+    size = sizeRate * size
+    x += offset
+    y += offset
     const cx = x + size / 2
     const cy = y + size / 2
     const originX = -size / 2
